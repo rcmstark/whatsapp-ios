@@ -6,13 +6,13 @@
 //  Copyright (c) 2015 HummingBird. All rights reserved.
 //
 
-#import "ChatController.h"
+#import "MessageController.h"
 #import "DAKeyboardControl.h"
 
 #import "Message.h"
 #import "MessageCell.h"
 
-@interface ChatController() <UITableViewDelegate, UITableViewDataSource>
+@interface MessageController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UITextField *textField;
@@ -26,12 +26,14 @@
 
 
 
-@implementation ChatController
+@implementation MessageController
 
 -(void)viewDidLoad
 {
     [super viewDidLoad];
     [self setTableView];
+    [self addTest];
+    self.textField.delegate = self;
 }
 -(void)viewDidAppear:(BOOL)animated
 {
@@ -65,12 +67,36 @@
     [super viewDidDisappear:animated];
     [self.view removeKeyboardControl];
 }
+-(void)addTest
+{
+    NSMutableArray *array = [NSMutableArray new];
+    
+    for (int i = 100; i >= 0; i--)
+    {
+        Message *message = [[Message alloc] init];
+        message.text = [NSString stringWithFormat:@"This is a test message. This project wants to copy whatsapp UI. Will I be able?"];
+        message.sender = ++self.changeSender%2==0?MessageSenderSomeone:MessageSenderMyself;
+        message.sent = [[NSDate date] dateByAddingTimeInterval:-i*24*60*60];;
+        
+        [array addObject:message];
+    }
+    [self.messageArray addMessages:array];
+}
 -(void)setTableView
 {
-    self.tableData = [[NSMutableArray alloc] init];
+    self.messageArray = [[MessageArray alloc] init];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f,self.view.frame.size.width, 10.0f)];
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+}
+-(void)scrollToBottomTableView
+{
+    if (self.tableView.contentOffset.y > self.tableView.frame.size.height)
+    {
+        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.tableData.count-1 inSection:0]
+                              atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    }
 }
 
 #pragma mark - Action
@@ -80,8 +106,10 @@
     Message *message = [[Message alloc] init];
     message.text = self.textField.text;
     message.sender = ++self.changeSender%2==0?MessageSenderSomeone:MessageSenderMyself;
+    message.sent = [NSDate date];
     
-    [self.tableData addObject:message];
+    [self.messageArray addMessage:message];
+    
     [self.tableView reloadData];
     [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.tableData.count-1 inSection:0]
                           atScrollPosition:UITableViewScrollPositionBottom animated:YES];
@@ -97,23 +125,20 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return [self.messageArray numberOfSections];
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.tableData.count;
+    return [self.messageArray numberOfMessagesInSection:section];
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"MessageCell";
     MessageCell *cell = (MessageCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
-    if (cell == nil)
-        cell = [[MessageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-    
-    Message *message = [self.tableData objectAtIndex:indexPath.row];
+    Message *message = [self.messageArray messageAtIndexPath:indexPath];
     cell.message = message;
-    cell.backgroundColor = [UIColor clearColor];
+
     return cell;
 }
 
@@ -130,6 +155,7 @@
     
     UIView *view = [[UIView alloc] initWithFrame:frame];
     view.backgroundColor = [UIColor clearColor];
+    view.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     
     UILabel *label = [[UILabel alloc] init];
     label.text = [self tableView:tableView titleForHeaderInSection:section];
@@ -138,21 +164,28 @@
     [label sizeToFit];
     label.center = view.center;
     label.font = [UIFont fontWithName:@"Helvetica" size:13.0];
-    //label.textColor = [UIColor darkGrayColor];
     label.backgroundColor = [UIColor colorWithRed:207/255.0 green:220/255.0 blue:252.0/255.0 alpha:1];
     label.layer.cornerRadius = 10;
     label.layer.masksToBounds = YES;
+    label.autoresizingMask = UIViewAutoresizingNone;
     [view addSubview:label];
     
     return view;
 }
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 40;
+}
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    NSDateFormatter *df = [[NSDateFormatter alloc] init];
-    df.timeStyle = NSDateFormatterNoStyle;
-    df.dateStyle = NSDateFormatterShortStyle;
-    df.doesRelativeDateFormatting = YES;
-    return [df stringFromDate:[NSDate date]];
+    return [self.messageArray titleForSection:section];
+}
+
+#pragma mark - UITextFieldDelegate
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    [self performSelector:@selector(scrollToBottomTableView) withObject:nil afterDelay:.3];
 }
 
 

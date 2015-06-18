@@ -31,7 +31,7 @@ typedef NS_ENUM(NSInteger, MessageSender)
 @property (assign, nonatomic) MessageSender sender;
 @property (assign, nonatomic) MessageStatus status;
 @property (strong, nonatomic) NSString *text;
-@property (strong, nonatomic) NSData *sent;
+@property (strong, nonatomic) NSDate *sent;
 
 @end
 

@@ -11,10 +11,15 @@
 @interface MessageCell ()
 @property (weak, nonatomic) IBOutlet UITextView *textView;
 @property (weak, nonatomic) IBOutlet UIImageView *bubbleImage;
+@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 @end
 
 @implementation MessageCell
 
+-(void)awakeFromNib
+{
+    self.backgroundColor = [UIColor clearColor];
+}
 -(CGFloat)height
 {
     return [self measureHeightOfUITextView:self.textView];
@@ -29,6 +34,7 @@
     _message = message;
     
     [self addBubble];
+    [self addTimeLabel];
 }
 - (void)addBubble
 {
@@ -51,10 +57,13 @@
                                   stretchableImageWithLeftCapWidth:15 topCapHeight:14];
         
         self.textView.textAlignment = NSTextAlignmentRight;
-        self.textView.frame = CGRectMake(self.contentView.frame.size.width - self.textView.frame.size.width - 20,
+        self.textView.frame = CGRectMake(self.contentView.frame.size.width - width - 20,
                                          0,
-                                         self.textView.frame.size.width,
-                                         self.textView.frame.size.height);
+                                         width,
+                                         height);
+        
+        self.textView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+        self.bubbleImage.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
     }
     else
     {
@@ -66,10 +75,16 @@
                                   stretchableImageWithLeftCapWidth:21 topCapHeight:14];
         
         self.textView.textAlignment = NSTextAlignmentLeft;
-        self.textView.frame = CGRectMake(x+15, 0, self.textView.frame.size.width, self.textView.frame.size.height);
+        self.textView.frame = CGRectMake(x+15,
+                                         0,
+                                         width,
+                                         height);
+        
+        self.textView.autoresizingMask = UIViewAutoresizingFlexibleRightMargin;
+        self.bubbleImage.autoresizingMask = UIViewAutoresizingFlexibleRightMargin;
     }
     
-    self.bubbleImage.frame = CGRectMake(x, y, width,height);
+    self.bubbleImage.frame = CGRectMake(x, y, width, height);
     
     [self addShadowToBubble];
 }
@@ -87,9 +102,79 @@
     imageView.layer.shouldRasterize = YES;
     imageView.layer.rasterizationScale = UIScreen.mainScreen.scale;
 }
+-(void)addTimeLabel
+{
+    //Set Text to Label
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    df.timeStyle = NSDateFormatterShortStyle;
+    df.dateStyle = NSDateFormatterNoStyle;
+    df.doesRelativeDateFormatting = YES;
+    self.timeLabel.text = [df stringFromDate:self.message.sent];
+    [self.timeLabel sizeToFit];
+    
+    //Set position
+    CGFloat x = _bubbleImage.frame.origin.x + _bubbleImage.frame.size.width - _timeLabel.frame.size.width;
+    CGFloat y = self.height - _timeLabel.frame.size.height - 2;
+    
+    if (self.message.sender == MessageSenderMyself)
+    {
+        x = x - 20;
+    }
+    else
+    {
+        x = x - 15;
+        y = y - 2;
+    }
+    
+    self.timeLabel.frame = CGRectMake(x,
+                                      y,
+                                      self.timeLabel.frame.size.width,
+                                      self.timeLabel.frame.size.height);
+    
+    //[self setTimeLabelSameLineTextView];
+}
+-(void)setTimeLabelSameLineTextView
+{
+    CGRect frame = self.timeLabel.frame;
+    CGFloat deltaX;
+    
+    //Single Line Case
+    if (self.height <= 45)
+    {
+        frame.origin.y = 9;
+        deltaX = _timeLabel.frame.size.width + 5;
+        
+        if (self.message.sender == MessageSenderMyself)
+        {
+            
+            [self shiftView:_textView deltaX:-deltaX];
+            [self increaseBubble:deltaX shiftOriginX:-deltaX];
+        }
+        else
+        {
+            frame.origin.x += deltaX;
+            [self increaseBubble:deltaX shiftOriginX:0];
+        }
+    }
+    
+    self.timeLabel.frame = frame;
+}
 
 #pragma mark - Helpers
 
+-(void)increaseBubble:(CGFloat)deltaWidth shiftOriginX:(CGFloat)deltaX
+{
+    CGRect frame = _bubbleImage.frame;
+    frame.size.width += deltaWidth;
+    frame.origin.x += deltaX;
+    _bubbleImage.frame = frame;
+}
+-(void)shiftView:(UIView *)view deltaX:(CGFloat)deltaX
+{
+    CGRect frame = view.frame;
+    frame.origin.x += deltaX;
+    view.frame = frame;
+}
 -(CGSize)contentSize:(UITextView*) textView
 {
     return [textView sizeThatFits:CGSizeMake(textView.frame.size.width, FLT_MAX)];
