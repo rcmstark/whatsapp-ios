@@ -20,11 +20,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Whatsapp/MessageCell.m"
-            timestampString = "456294493.662772"
+            timestampString = "456365976.889894"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "57"
-            endingLineNumber = "57"
+            startingLineNumber = "59"
+            endingLineNumber = "59"
             landmarkName = "-addBubble"
             landmarkType = "5">
          </BreakpointContent>

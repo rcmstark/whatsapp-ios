@@ -40,51 +40,55 @@
 {
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    //TextView contentSize
-    CGFloat width = self.width;
-    CGFloat height = self.height;
+    //Estimation
+    CGFloat content_width = self.width;
+    CGFloat content_height = self.height;
+    
+    CGRect textView_frame = self.textView.frame;
+    UIViewAutoresizing autoresizing;
     
     //Bubble positions
-    CGFloat x;
-    CGFloat y;
+    CGFloat bubble_x;
+    CGFloat bubble_y;
     
     if (self.message.sender == MessageSenderMyself)
     {
-        x = self.contentView.frame.size.width - width - 2;
-        y = 0;
+        bubble_x = self.contentView.frame.size.width - content_width - 2;
+        bubble_y = 0;
         
         self.bubbleImage.image = [[UIImage imageNamed:@"bubbleMine"]
                                   stretchableImageWithLeftCapWidth:15 topCapHeight:14];
         
         self.textView.textAlignment = NSTextAlignmentRight;
-        self.textView.frame = CGRectMake(self.contentView.frame.size.width - width - 20,
-                                         0,
-                                         width,
-                                         height);
         
-        self.textView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
-        self.bubbleImage.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+        textView_frame.origin.x = bubble_x+5;
+        textView_frame.origin.y = 0;
+        
+        autoresizing = UIViewAutoresizingFlexibleLeftMargin;
     }
     else
     {
-        x = 2;
-        y = 0;
-        
+        bubble_x = 2;
+        bubble_y = 0;
         
         self.bubbleImage.image = [[UIImage imageNamed:@"bubbleSomeone"]
                                   stretchableImageWithLeftCapWidth:21 topCapHeight:14];
         
         self.textView.textAlignment = NSTextAlignmentLeft;
-        self.textView.frame = CGRectMake(x+15,
-                                         0,
-                                         width,
-                                         height);
         
-        self.textView.autoresizingMask = UIViewAutoresizingFlexibleRightMargin;
-        self.bubbleImage.autoresizingMask = UIViewAutoresizingFlexibleRightMargin;
+        textView_frame.origin.x = bubble_x+15;
+        textView_frame.origin.y = 0;
+        
+        autoresizing = UIViewAutoresizingFlexibleRightMargin;
     }
     
-    self.bubbleImage.frame = CGRectMake(x, y, width, height);
+    //Set frame
+    self.textView.frame = textView_frame;
+    self.bubbleImage.frame = CGRectMake(bubble_x, bubble_y, content_width, content_height);
+    
+    //Set textView
+    self.textView.autoresizingMask = autoresizing;
+    self.bubbleImage.autoresizingMask = autoresizing;
     
     [self addShadowToBubble];
 }
