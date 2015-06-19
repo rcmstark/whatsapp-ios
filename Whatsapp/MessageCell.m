@@ -16,10 +16,7 @@
 
 @implementation MessageCell
 
--(void)awakeFromNib
-{
-    self.backgroundColor = [UIColor clearColor];
-}
+
 -(CGFloat)height
 {
     return [self measureHeightOfUITextView:self.textView];
@@ -35,6 +32,13 @@
     
     [self addBubble];
     [self addTimeLabel];
+}
+
+#pragma mark - 
+
+-(void)awakeFromNib
+{
+    self.backgroundColor = [UIColor clearColor];
 }
 - (void)addBubble
 {
@@ -59,10 +63,11 @@
         self.bubbleImage.image = [[UIImage imageNamed:@"bubbleMine"]
                                   stretchableImageWithLeftCapWidth:15 topCapHeight:14];
         
-        self.textView.textAlignment = NSTextAlignmentRight;
+        self.textView.textAlignment = NSTextAlignmentLeft;
         
-        textView_frame.origin.x = bubble_x+5;
+        textView_frame.origin.x = bubble_x + 5;
         textView_frame.origin.y = 0;
+        textView_frame.size.width = content_width;
         
         autoresizing = UIViewAutoresizingFlexibleLeftMargin;
     }
@@ -76,7 +81,7 @@
         
         self.textView.textAlignment = NSTextAlignmentLeft;
         
-        textView_frame.origin.x = bubble_x+15;
+        textView_frame.origin.x = bubble_x + 15;
         textView_frame.origin.y = 0;
         
         autoresizing = UIViewAutoresizingFlexibleRightMargin;
@@ -117,56 +122,56 @@
     [self.timeLabel sizeToFit];
     
     //Set position
-    CGFloat x = _bubbleImage.frame.origin.x + _bubbleImage.frame.size.width - _timeLabel.frame.size.width;
-    CGFloat y = self.height - _timeLabel.frame.size.height - 2;
+    CGFloat time_x = _bubbleImage.frame.origin.x + _bubbleImage.frame.size.width - _timeLabel.frame.size.width;
+    CGFloat time_y = self.height - _timeLabel.frame.size.height - 2;
     UIViewAutoresizing autoresizing;
 
     if (self.message.sender == MessageSenderMyself)
     {
-        x = x - 20;
+        time_x = time_x - 20;
         autoresizing = UIViewAutoresizingFlexibleLeftMargin;
     }
     else
     {
-        x = x - 15;
-        y = y - 2;
+        time_x = time_x - 15;
+        time_y = time_y - 2;
         autoresizing = UIViewAutoresizingFlexibleRightMargin;
     }
     
-    self.timeLabel.frame = CGRectMake(x,
-                                      y,
+    self.timeLabel.frame = CGRectMake(time_x,
+                                      time_y,
                                       self.timeLabel.frame.size.width,
                                       self.timeLabel.frame.size.height);
     
     self.timeLabel.autoresizingMask = autoresizing;
     
-    //[self setTimeLabelSameLineTextView];
+    //[self addSingleLineCase];
 }
--(void)setTimeLabelSameLineTextView
+-(void)addSingleLineCase
 {
-    CGRect frame = self.timeLabel.frame;
-    CGFloat deltaX;
+    CGRect time_frame = self.timeLabel.frame;
+    CGFloat delta_x;
     
     //Single Line Case
     if (self.height <= 45)
     {
-        frame.origin.y = 9;
-        deltaX = _timeLabel.frame.size.width + 5;
+        time_frame.origin.y = 9;
+        delta_x = _timeLabel.frame.size.width + 5;
         
         if (self.message.sender == MessageSenderMyself)
         {
             
-            [self shiftView:_textView deltaX:-deltaX];
-            [self increaseBubble:deltaX shiftOriginX:-deltaX];
+            //[self view:_textView shiftOriginX:-delta_x];
+            [self increaseBubble:delta_x shiftOriginX:-delta_x];
         }
         else
         {
-            frame.origin.x += deltaX;
-            [self increaseBubble:deltaX shiftOriginX:0];
+            time_frame.origin.x += delta_x;
+            [self increaseBubble:delta_x shiftOriginX:0];
         }
     }
     
-    self.timeLabel.frame = frame;
+    self.timeLabel.frame = time_frame;
 }
 
 #pragma mark - Helpers
@@ -178,7 +183,7 @@
     frame.origin.x += deltaX;
     _bubbleImage.frame = frame;
 }
--(void)shiftView:(UIView *)view deltaX:(CGFloat)deltaX
+-(void)view:(UIView *)view shiftOriginX:(CGFloat)deltaX
 {
     CGRect frame = view.frame;
     frame.origin.x += deltaX;

@@ -20,5 +20,6 @@
 -(NSInteger)numberOfMessagesInSection:(NSInteger)section;
 -(NSString *)titleForSection:(NSInteger)section;
 -(Message *)messageAtIndexPath:(NSIndexPath *)indexPath;
+-(NSIndexPath *)indexPathForLastMessage;
 
 @end

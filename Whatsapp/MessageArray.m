@@ -78,6 +78,12 @@
     NSArray *array = [self.dictionary valueForKey:key];
     return array[indexPath.row];
 }
+-(NSIndexPath *)indexPathForLastMessage
+{
+    NSInteger lastSection = [self numberOfSections]-1;
+    NSInteger numberOfMessages = [self numberOfMessagesInSection:lastSection];
+    return [NSIndexPath indexPathForRow:numberOfMessages-1 inSection:lastSection];
+}
 #pragma mark - Helpers
 
 -(void)addMessage:(Message *)message refreshCahe:(BOOL)refresh

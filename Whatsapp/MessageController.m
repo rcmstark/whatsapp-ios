@@ -18,7 +18,6 @@
 @property (weak, nonatomic) IBOutlet UITextField *textField;
 @property (weak, nonatomic) IBOutlet UIView *toolBar;
 
-@property (strong, nonatomic) NSMutableArray *tableData;
 @property (assign, nonatomic) NSInteger changeSender;
 
 @end
@@ -74,7 +73,7 @@
     for (int i = 100; i >= 0; i--)
     {
         Message *message = [[Message alloc] init];
-        message.text = [NSString stringWithFormat:@"This is a test message. This project wants to copy whatsapp UI. Will I be able?"];
+        message.text = [NSString stringWithFormat:@"This is a test message."];
         message.sender = ++self.changeSender%2==0?MessageSenderSomeone:MessageSenderMyself;
         message.sent = [[NSDate date] dateByAddingTimeInterval:-i*24*60*60];;
         
@@ -94,7 +93,7 @@
 {
     if (self.tableView.contentOffset.y > self.tableView.frame.size.height)
     {
-        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.tableData.count-1 inSection:0]
+        [self.tableView scrollToRowAtIndexPath:[self.messageArray indexPathForLastMessage]
                               atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     }
 }
@@ -111,7 +110,7 @@
     [self.messageArray addMessage:message];
     
     [self.tableView reloadData];
-    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.tableData.count-1 inSection:0]
+    [self.tableView scrollToRowAtIndexPath:[self.messageArray indexPathForLastMessage]
                           atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     
     self.textField.text = @"";
