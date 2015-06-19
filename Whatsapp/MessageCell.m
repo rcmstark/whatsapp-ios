@@ -119,21 +119,26 @@
     //Set position
     CGFloat x = _bubbleImage.frame.origin.x + _bubbleImage.frame.size.width - _timeLabel.frame.size.width;
     CGFloat y = self.height - _timeLabel.frame.size.height - 2;
-    
+    UIViewAutoresizing autoresizing;
+
     if (self.message.sender == MessageSenderMyself)
     {
         x = x - 20;
+        autoresizing = UIViewAutoresizingFlexibleLeftMargin;
     }
     else
     {
         x = x - 15;
         y = y - 2;
+        autoresizing = UIViewAutoresizingFlexibleRightMargin;
     }
     
     self.timeLabel.frame = CGRectMake(x,
                                       y,
                                       self.timeLabel.frame.size.width,
                                       self.timeLabel.frame.size.height);
+    
+    self.timeLabel.autoresizingMask = autoresizing;
     
     //[self setTimeLabelSameLineTextView];
 }
