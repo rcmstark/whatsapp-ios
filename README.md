@@ -13,3 +13,7 @@ I'm developing yet, but if you guys download it and run, you will see that it al
 have something concrete. Anyone who want to help is welcome. This project is really simple.
 
 For now, I just support send text.
+
+Contributors are welcome!
+
+![alt tag](https://raw.github.com/rcmcastro/whatsapp-ios/master/Screenshots/iOS Simulator Screen Shot Jun 18, 2015, 9.33.35 PM.png)
