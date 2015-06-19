@@ -32,7 +32,7 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="77" height="100"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 </imageView>
-                                                <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" editable="NO" textAlignment="right" id="dRF-Zv-TMC">
+                                                <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" editable="NO" id="dRF-Zv-TMC">
                                                     <rect key="frame" x="50" y="0.0" width="250" height="99"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                                     <string key="text">Retweet if you agree: We need to keep the doors of higher education open to everyone who works for it. We need to #MakeCollegeAffordable.</string>

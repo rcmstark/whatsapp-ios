@@ -63,11 +63,9 @@
         self.bubbleImage.image = [[UIImage imageNamed:@"bubbleMine"]
                                   stretchableImageWithLeftCapWidth:15 topCapHeight:14];
         
-        self.textView.textAlignment = NSTextAlignmentLeft;
-        
         textView_frame.origin.x = bubble_x + 5;
         textView_frame.origin.y = 0;
-        textView_frame.size.width = content_width;
+        textView_frame.size.width = content_width - 5;
         
         autoresizing = UIViewAutoresizingFlexibleLeftMargin;
     }
@@ -78,8 +76,6 @@
         
         self.bubbleImage.image = [[UIImage imageNamed:@"bubbleSomeone"]
                                   stretchableImageWithLeftCapWidth:21 topCapHeight:14];
-        
-        self.textView.textAlignment = NSTextAlignmentLeft;
         
         textView_frame.origin.x = bubble_x + 15;
         textView_frame.origin.y = 0;
@@ -145,23 +141,24 @@
     
     self.timeLabel.autoresizingMask = autoresizing;
     
-    //[self addSingleLineCase];
+    [self addSingleLineCase];
 }
 -(void)addSingleLineCase
 {
+    CGFloat delta_t = 13;
+    CGFloat delta_x = self.timeLabel.frame.size.width + 2 + delta_t;
     CGRect time_frame = self.timeLabel.frame;
-    CGFloat delta_x;
+    
+    CGFloat bubble_width = self.bubbleImage.frame.size.width;
+    CGFloat view_width = self.contentView.frame.size.width;
     
     //Single Line Case
-    if (self.height <= 45)
+    if (self.height <= 45 && bubble_width + delta_x <= 0.8*view_width)
     {
-        time_frame.origin.y = 9;
-        delta_x = _timeLabel.frame.size.width + 5;
-        
         if (self.message.sender == MessageSenderMyself)
         {
             
-            //[self view:_textView shiftOriginX:-delta_x];
+            [self view:_textView shiftOriginX:-delta_x];
             [self increaseBubble:delta_x shiftOriginX:-delta_x];
         }
         else
@@ -169,9 +166,12 @@
             time_frame.origin.x += delta_x;
             [self increaseBubble:delta_x shiftOriginX:0];
         }
+        
+        time_frame.origin.x -= delta_t;
+        time_frame.origin.y = 10;
+        self.timeLabel.frame = time_frame;
     }
     
-    self.timeLabel.frame = time_frame;
 }
 
 #pragma mark - Helpers
