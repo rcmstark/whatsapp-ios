@@ -19,11 +19,11 @@
 
 -(CGFloat)height
 {
-    return [self measureHeightOfUITextView:self.textView];
+    return _bubbleImage.frame.size.height;
 }
 -(CGFloat)width
 {
-    return [self contentSize:self.textView].width + 25;
+    return _bubbleImage.frame.size.width;
 }
 -(void)setMessage:(Message *)message
 {
@@ -44,48 +44,62 @@
 {
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    //Estimation
-    CGFloat content_width = self.width;
-    CGFloat content_height = self.height;
-    
-    CGRect textView_frame = self.textView.frame;
-    UIViewAutoresizing autoresizing;
+    //Estimation of TextView Size
+    CGFloat textView_x;
+    CGFloat textView_y;
+    CGFloat textView_width = [self measureSizeOfUITextView].width;
+    CGFloat textView_height = [self measureSizeOfUITextView].height;
+    CGFloat textView_marginLeft;
+    CGFloat textView_marginRight;
+    CGFloat textView_marginBotton = 10;
     
     //Bubble positions
     CGFloat bubble_x;
     CGFloat bubble_y;
+    CGFloat bubble_width;
+    CGFloat bubble_height;
+    
+    UIViewAutoresizing autoresizing;
     
     if (self.message.sender == MessageSenderMyself)
     {
-        bubble_x = self.contentView.frame.size.width - content_width - 2;
+        textView_marginLeft = 10;
+        textView_marginRight = 20;
+        bubble_x = self.contentView.frame.size.width - textView_width - 2 - textView_marginLeft - textView_marginRight;
         bubble_y = 0;
         
         self.bubbleImage.image = [[UIImage imageNamed:@"bubbleMine"]
                                   stretchableImageWithLeftCapWidth:15 topCapHeight:14];
         
-        textView_frame.origin.x = bubble_x + 5;
-        textView_frame.origin.y = 0;
-        textView_frame.size.width = content_width - 5;
+        textView_x = bubble_x + textView_marginLeft;
+        textView_y = 0;
+        
+        bubble_width = textView_width + 20;
         
         autoresizing = UIViewAutoresizingFlexibleLeftMargin;
     }
     else
     {
         bubble_x = 2;
-        bubble_y = 0;
+        bubble_y = 1;
         
         self.bubbleImage.image = [[UIImage imageNamed:@"bubbleSomeone"]
                                   stretchableImageWithLeftCapWidth:21 topCapHeight:14];
         
-        textView_frame.origin.x = bubble_x + 15;
-        textView_frame.origin.y = 0;
-        
+        textView_marginLeft = 15;
+        textView_marginRight = 15;
+        textView_x = bubble_x + textView_marginLeft;
+        textView_y = 0;
+    
         autoresizing = UIViewAutoresizingFlexibleRightMargin;
     }
     
+    bubble_width = textView_width + textView_marginLeft + textView_marginRight;
+    bubble_height = textView_height + textView_marginBotton;
+    
     //Set frame
-    self.textView.frame = textView_frame;
-    self.bubbleImage.frame = CGRectMake(bubble_x, bubble_y, content_width, content_height);
+    self.textView.frame = CGRectMake(textView_x, textView_y, textView_width, textView_height);
+    self.bubbleImage.frame = CGRectMake(bubble_x, bubble_y, bubble_width, bubble_height);
     
     //Set textView
     self.textView.autoresizingMask = autoresizing;
@@ -189,9 +203,14 @@
     frame.origin.x += deltaX;
     view.frame = frame;
 }
--(CGSize)contentSize:(UITextView*) textView
+-(CGSize)measureSizeOfUITextView
 {
-    return [textView sizeThatFits:CGSizeMake(textView.frame.size.width, FLT_MAX)];
+    CGFloat max_width = 0.7*self.contentView.frame.size.width;
+    UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, max_width, MAXFLOAT)];
+    textView.font = _textView.font;
+    textView.text = _textView.text;
+    [textView sizeToFit];
+    return textView.frame.size;
 }
 
 #pragma mark - iOS7 correction
