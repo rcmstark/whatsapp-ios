@@ -9,9 +9,9 @@
 #import "MessageCell.h"
 
 @interface MessageCell ()
-@property (weak, nonatomic) IBOutlet UITextView *textView;
-@property (weak, nonatomic) IBOutlet UIImageView *bubbleImage;
-@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
+@property (strong, nonatomic) UITextView *textView;
+@property (strong, nonatomic) UIImageView *bubbleImage;
+@property (strong, nonatomic) UILabel *timeLabel;
 @end
 
 @implementation MessageCell
@@ -27,11 +27,18 @@
 }
 -(void)setMessage:(Message *)message
 {
-    _textView.text = message.text;
     _message = message;
     
+    [self cleanView];
+    
+    [self addTextView];
+    [self setTextView];
+    
     [self addBubble];
+    [self setBubble];
+    
     [self addTimeLabel];
+    [self setTimeLabel];
 }
 
 #pragma mark - 
@@ -39,16 +46,46 @@
 -(void)awakeFromNib
 {
     self.backgroundColor = [UIColor clearColor];
-}
-- (void)addBubble
-{
     self.selectionStyle = UITableViewCellSelectionStyleNone;
-    
+}
+-(void)cleanView
+{
+    for (UIView *view in self.contentView.subviews)
+        [view removeFromSuperview];
+}
+
+#pragma mark - TextView
+
+-(void)addTextView
+{
+    CGFloat max_witdh = 0.7*self.contentView.frame.size.width;
+    _textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, max_witdh, MAXFLOAT)];
+    _textView.font = [UIFont fontWithName:@"Helvetica" size:14.0];
+    _textView.backgroundColor = [UIColor clearColor];
+    _textView.userInteractionEnabled = NO;
+    [self.contentView addSubview:_textView];
+}
+-(void)setTextView
+{
+    _textView.text = _message.text;
+    [_textView sizeToFit];
+}
+
+#pragma mark - BubbleImage
+
+-(void)addBubble
+{
+    _bubbleImage = [[UIImageView alloc] init];
+    _bubbleImage.userInteractionEnabled = YES;
+    [self.contentView insertSubview:_bubbleImage belowSubview:_textView];
+}
+- (void)setBubble
+{
     //Estimation of TextView Size
     CGFloat textView_x;
     CGFloat textView_y;
-    CGFloat textView_width = [self measureSizeOfUITextView].width;
-    CGFloat textView_height = [self measureSizeOfUITextView].height;
+    CGFloat textView_width = _textView.frame.size.width;
+    CGFloat textView_height = _textView.frame.size.height;
     CGFloat textView_marginLeft;
     CGFloat textView_marginRight;
     CGFloat textView_marginBotton = 10;
@@ -121,7 +158,18 @@
     imageView.layer.shouldRasterize = YES;
     imageView.layer.rasterizationScale = UIScreen.mainScreen.scale;
 }
+
+#pragma mark - TimeLabel
+
 -(void)addTimeLabel
+{
+    _timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 70, 21)];
+    _timeLabel.textColor = [UIColor lightGrayColor];
+    _timeLabel.font = [UIFont fontWithName:@"Helvetica" size:12.0];
+    _timeLabel.userInteractionEnabled = NO;
+    [self.contentView addSubview:_timeLabel];
+}
+-(void)setTimeLabel
 {
     //Set Text to Label
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
@@ -185,7 +233,6 @@
         time_frame.origin.y = 10;
         self.timeLabel.frame = time_frame;
     }
-    
 }
 
 #pragma mark - Helpers
@@ -213,58 +260,5 @@
     return textView.frame.size;
 }
 
-#pragma mark - iOS7 correction
-
--(CGFloat)measureHeightOfUITextView:(UITextView *)textView
-{
-    if ([textView respondsToSelector:@selector(snapshotViewAfterScreenUpdates:)])
-    {
-        // This is the code for iOS 7. contentSize no longer returns the correct value, so
-        // we have to calculate it.
-        //
-        // This is partly borrowed from HPGrowingTextView, but I've replaced the
-        // magic fudge factors with the calculated values (having worked out where
-        // they came from)
-        
-        CGRect frame = textView.bounds;
-        
-        // Take account of the padding added around the text.
-        
-        UIEdgeInsets textContainerInsets = textView.textContainerInset;
-        UIEdgeInsets contentInsets = textView.contentInset;
-        
-        CGFloat leftRightPadding = textContainerInsets.left + textContainerInsets.right + textView.textContainer.lineFragmentPadding * 2 + contentInsets.left + contentInsets.right;
-        CGFloat topBottomPadding = textContainerInsets.top + textContainerInsets.bottom + contentInsets.top + contentInsets.bottom;
-        
-        frame.size.width -= leftRightPadding;
-        frame.size.height -= topBottomPadding;
-        
-        NSString *textToMeasure = textView.text;
-        if ([textToMeasure hasSuffix:@"\n"])
-        {
-            textToMeasure = [NSString stringWithFormat:@"%@-", textView.text];
-        }
-        
-        // NSString class method: boundingRectWithSize:options:attributes:context is
-        // available only on ios7.0 sdk.
-        
-        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-        [paragraphStyle setLineBreakMode:NSLineBreakByWordWrapping];
-        
-        NSDictionary *attributes = @{ NSFontAttributeName: textView.font, NSParagraphStyleAttributeName : paragraphStyle };
-        
-        CGRect size = [textToMeasure boundingRectWithSize:CGSizeMake(CGRectGetWidth(frame), MAXFLOAT)
-                                                  options:NSStringDrawingUsesLineFragmentOrigin
-                                               attributes:attributes
-                                                  context:nil];
-        
-        CGFloat measuredHeight = ceilf(CGRectGetHeight(size) + topBottomPadding);
-        return measuredHeight+8.0f;
-    }
-    else
-    {
-        return textView.contentSize.height;
-    }
-}
 
 @end

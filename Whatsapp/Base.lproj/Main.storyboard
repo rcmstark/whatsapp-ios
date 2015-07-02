@@ -27,32 +27,7 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="aYf-Ez-oFc" id="oZy-zO-5F3">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="99"/>
                                             <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="2IM-c2-VNS">
-                                                    <rect key="frame" x="0.0" y="0.0" width="77" height="100"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                </imageView>
-                                                <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" editable="NO" id="dRF-Zv-TMC">
-                                                    <rect key="frame" x="50" y="0.0" width="250" height="99"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                                    <string key="text">Retweet if you agree: We need to keep the doors of higher education open to everyone who works for it. We need to #MakeCollegeAffordable.</string>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                                </textView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="9:25 PM" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="wcQ-Ys-1o8">
-                                                    <rect key="frame" x="235" y="78" width="65" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
                                         </tableViewCellContentView>
-                                        <connections>
-                                            <outlet property="bubbleImage" destination="2IM-c2-VNS" id="TaL-RT-KGA"/>
-                                            <outlet property="textView" destination="dRF-Zv-TMC" id="jyg-hs-Tdo"/>
-                                            <outlet property="timeLabel" destination="wcQ-Ys-1o8" id="jCD-Dw-8kM"/>
-                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
