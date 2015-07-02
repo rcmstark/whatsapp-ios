@@ -47,6 +47,7 @@
 {
     self.backgroundColor = [UIColor clearColor];
     self.selectionStyle = UITableViewCellSelectionStyleNone;
+    self.contentView.backgroundColor = [UIColor clearColor];
 }
 -(void)cleanView
 {
@@ -88,7 +89,7 @@
     CGFloat textView_height = _textView.frame.size.height;
     CGFloat textView_marginLeft;
     CGFloat textView_marginRight;
-    CGFloat textView_marginBotton = 10;
+    CGFloat textView_marginBottom = 10;
     
     //Bubble positions
     CGFloat bubble_x;
@@ -102,7 +103,7 @@
     {
         textView_marginLeft = 10;
         textView_marginRight = 20;
-        bubble_x = self.contentView.frame.size.width - textView_width - 2 - textView_marginLeft - textView_marginRight;
+        bubble_x = self.contentView.frame.size.width - textView_width - textView_marginLeft - textView_marginRight - 1;
         bubble_y = 0;
         
         self.bubbleImage.image = [[UIImage imageNamed:@"bubbleMine"]
@@ -132,7 +133,7 @@
     }
     
     bubble_width = textView_width + textView_marginLeft + textView_marginRight;
-    bubble_height = textView_height + textView_marginBotton;
+    bubble_height = textView_height + textView_marginBottom;
     
     //Set frame
     self.textView.frame = CGRectMake(textView_x, textView_y, textView_width, textView_height);

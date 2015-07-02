@@ -102,17 +102,22 @@
 
 - (IBAction)send:(UIButton *)button
 {
+    //Verify Empty Text
+    NSString *emptyText = [self.textField.text stringByReplacingOccurrencesOfString:@" " withString:@""];
+    if ([emptyText isEqualToString:@""]) return;
+    
+    //Add Message to MessageArray
     Message *message = [[Message alloc] init];
     message.text = self.textField.text;
     message.sender = ++self.changeSender%2==0?MessageSenderSomeone:MessageSenderMyself;
     message.sent = [NSDate date];
-    
     [self.messageArray addMessage:message];
     
-    [self.tableView reloadData];
+    NSIndexPath *indexPath = [self.messageArray indexPathForMessage:message];
+    [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     [self.tableView scrollToRowAtIndexPath:[self.messageArray indexPathForLastMessage]
                           atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-    
+
     self.textField.text = @"";
 }
 - (IBAction)userDidTapScreen:(id)sender

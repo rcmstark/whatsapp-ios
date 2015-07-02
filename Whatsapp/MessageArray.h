@@ -9,6 +9,11 @@
 #import <Foundation/Foundation.h>
 #import "Message.h"
 
+//
+// This class teaches tableView how to interact with
+// dictionaty. Basically it's mimics the array use in
+// a tableView.
+//
 @interface MessageArray : NSObject
 
 -(void)addMessage:(Message *)message;
@@ -21,5 +26,6 @@
 -(NSString *)titleForSection:(NSInteger)section;
 -(Message *)messageAtIndexPath:(NSIndexPath *)indexPath;
 -(NSIndexPath *)indexPathForLastMessage;
+-(NSIndexPath *)indexPathForMessage:(Message *)message;
 
 @end

@@ -84,6 +84,14 @@
     NSInteger numberOfMessages = [self numberOfMessagesInSection:lastSection];
     return [NSIndexPath indexPathForRow:numberOfMessages-1 inSection:lastSection];
 }
+-(NSIndexPath *)indexPathForMessage:(Message *)message
+{
+    NSString *key = [self keyForMessage:message];
+    NSInteger section = [[self orderedKeys] indexOfObject:key];
+    NSInteger row = [[self.dictionary valueForKey:key] indexOfObject:message];
+    return [NSIndexPath indexPathForRow:row inSection:section];
+}
+
 #pragma mark - Helpers
 
 -(void)addMessage:(Message *)message refreshCahe:(BOOL)refresh
