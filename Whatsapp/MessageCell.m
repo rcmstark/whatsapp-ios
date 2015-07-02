@@ -53,6 +53,10 @@
 {
     for (UIView *view in self.contentView.subviews)
         [view removeFromSuperview];
+    
+    _textView = nil;
+    _timeLabel = nil;
+    _bubbleImage = nil;
 }
 
 #pragma mark - TextView
@@ -208,11 +212,10 @@
 }
 -(void)addSingleLineCase
 {
-    CGFloat delta_t = 13;
-    CGFloat delta_x = self.timeLabel.frame.size.width + 2 + delta_t;
+    CGFloat delta_x = _timeLabel.frame.size.width + 2;
     CGRect time_frame = self.timeLabel.frame;
     
-    CGFloat bubble_width = self.bubbleImage.frame.size.width;
+    CGFloat bubble_width = _bubbleImage.frame.size.width;
     CGFloat view_width = self.contentView.frame.size.width;
     
     //Single Line Case
@@ -220,7 +223,7 @@
     {
         if (self.message.sender == MessageSenderMyself)
         {
-            
+            time_frame.origin.x -= 20;
             [self view:_textView shiftOriginX:-delta_x];
             [self increaseBubble:delta_x shiftOriginX:-delta_x];
         }
@@ -230,8 +233,6 @@
             [self increaseBubble:delta_x shiftOriginX:0];
         }
         
-        time_frame.origin.x -= delta_t;
-        time_frame.origin.y = 10;
         self.timeLabel.frame = time_frame;
     }
 }
