@@ -97,7 +97,7 @@
     CGFloat textView_height = _textView.frame.size.height;
     CGFloat textView_marginLeft;
     CGFloat textView_marginRight;
-    CGFloat textView_marginBottom = 10;
+    CGFloat textView_marginBottom = 5;
     
     //Bubble positions
     CGFloat bubble_x;
@@ -195,7 +195,7 @@
 
     if (self.message.sender == MessageSenderMyself)
     {
-        time_x = time_x - 20;
+        time_x = time_x - 40;
         autoresizing = UIViewAutoresizingFlexibleLeftMargin;
     }
     else
@@ -227,7 +227,7 @@
     {
         if (self.message.sender == MessageSenderMyself)
         {
-            time_frame.origin.x -= 20;
+            delta_x += 20;
             [self view:_textView shiftOriginX:-delta_x];
             [self increaseBubble:delta_x shiftOriginX:-delta_x];
         }
