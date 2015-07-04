@@ -78,6 +78,7 @@
         message.text = [NSString stringWithFormat:@"This is a test message."];
         message.sender = ++self.changeSender%2==0?MessageSenderSomeone:MessageSenderMyself;
         message.sent = [[NSDate date] dateByAddingTimeInterval:-i*24*60*60];;
+        message.status = MessageStatusRead;
         
         [array addObject:message];
     }
@@ -117,16 +118,11 @@
     [self.messageArray addMessage:message];
     NSIndexPath *indexPath = [self.messageArray indexPathForMessage:message];
     
+    [self.tableView beginUpdates];
     if ([self.messageArray numberOfMessagesInSection:indexPath.section] == 1)
-    {
-        [self.tableView reloadData];
-    }
-    else
-    {
-        [self.tableView beginUpdates];
-        [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-        [self.tableView endUpdates];
-    }
+        [self.tableView insertSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView endUpdates];
     
     [self.tableView scrollToRowAtIndexPath:[self.messageArray indexPathForLastMessage]
                           atScrollPosition:UITableViewScrollPositionBottom animated:YES];
