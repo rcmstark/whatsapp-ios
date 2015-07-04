@@ -12,6 +12,7 @@
 @property (strong, nonatomic) UITextView *textView;
 @property (strong, nonatomic) UIImageView *bubbleImage;
 @property (strong, nonatomic) UILabel *timeLabel;
+@property (strong, nonatomic) UIImageView *statusIcon;
 @end
 
 @implementation MessageCell
@@ -39,6 +40,9 @@
     
     [self addTimeLabel];
     [self setTimeLabel];
+    
+    [self addStatusIcon];
+    [self setStatusIcon];
 }
 
 #pragma mark - 
@@ -168,7 +172,7 @@
 
 -(void)addTimeLabel
 {
-    _timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 70, 21)];
+    _timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 70, 20)];
     _timeLabel.textColor = [UIColor lightGrayColor];
     _timeLabel.font = [UIFont fontWithName:@"Helvetica" size:12.0];
     _timeLabel.userInteractionEnabled = NO;
@@ -235,6 +239,36 @@
         
         self.timeLabel.frame = time_frame;
     }
+}
+
+#pragma mark - StatusIcon
+
+-(void)addStatusIcon
+{
+    CGRect time_frame = _timeLabel.frame;
+    CGRect status_frame = CGRectMake(0, 0, 15, 10);
+    status_frame.origin.x = time_frame.origin.x + time_frame.size.width + 5;
+    status_frame.origin.y = time_frame.origin.y;
+    _statusIcon = [[UIImageView alloc] initWithFrame:status_frame];
+    _statusIcon.contentMode = UIViewContentModeLeft;
+    [self.contentView addSubview:_statusIcon];
+}
+-(void)setStatusIcon
+{
+    if (self.message.status == MessageStatusSent)
+        _statusIcon.image = [UIImage imageNamed:@"status_sent"];
+    else if (self.message.status == MessageStatusNotified)
+        _statusIcon.image = [UIImage imageNamed:@"status_notified"];
+    else if (self.message.status == MessageStatusRead)
+        _statusIcon.image = [UIImage imageNamed:@"status_read"];
+    
+    _statusIcon.hidden = _message.sender == MessageSenderSomeone;
+    
+    //Animate Transition
+    _statusIcon.alpha = 0;
+    [UIView animateWithDuration:.5 animations:^{
+        _statusIcon.alpha = 1;
+    }];
 }
 
 #pragma mark - Helpers

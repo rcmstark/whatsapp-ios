@@ -11,14 +11,16 @@
 
 #import "Message.h"
 #import "MessageCell.h"
+#import "MessageGateway.h"
 
-@interface MessageController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
+@interface MessageController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, MessageGatewayDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UITextField *textField;
 @property (weak, nonatomic) IBOutlet UIView *toolBar;
 
 @property (assign, nonatomic) NSInteger changeSender;
+@property (strong, nonatomic) MessageGateway *gateway;
 
 @end
 
@@ -70,7 +72,7 @@
 {
     NSMutableArray *array = [NSMutableArray new];
     
-    for (int i = 100; i >= 0; i--)
+    for (int i = 2; i > 0; i--)
     {
         Message *message = [[Message alloc] init];
         message.text = [NSString stringWithFormat:@"This is a test message."];
@@ -111,14 +113,32 @@
     message.text = self.textField.text;
     message.sender = ++self.changeSender%2==0?MessageSenderSomeone:MessageSenderMyself;
     message.sent = [NSDate date];
-    [self.messageArray addMessage:message];
     
+    [self.messageArray addMessage:message];
     NSIndexPath *indexPath = [self.messageArray indexPathForMessage:message];
-    [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    
+    if ([self.messageArray numberOfMessagesInSection:indexPath.section] == 1)
+    {
+        [self.tableView reloadData];
+    }
+    else
+    {
+        [self.tableView beginUpdates];
+        [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView endUpdates];
+    }
+    
     [self.tableView scrollToRowAtIndexPath:[self.messageArray indexPathForLastMessage]
                           atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 
     self.textField.text = @"";
+    
+    if (!_gateway)
+    {
+        _gateway = [[MessageGateway alloc] init];
+        _gateway.delegate = self;
+    }
+    [_gateway sendMessage:message];
 }
 - (IBAction)userDidTapScreen:(id)sender
 {
@@ -192,5 +212,14 @@
     [self performSelector:@selector(scrollToBottomTableView) withObject:nil afterDelay:.3];
 }
 
+#pragma mark - MessageGateway
+
+-(void)gatewayDidUpdateStatusForMessage:(Message *)message
+{
+    NSIndexPath *indexPath = [self.messageArray indexPathForMessage:message];
+    [self.tableView beginUpdates];
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView endUpdates];
+}
 
 @end

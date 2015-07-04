@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E03503751B47C0490041555A /* MessageGateway.m in Sources */ = {isa = PBXBuildFile; fileRef = E03503741B47C0490041555A /* MessageGateway.m */; };
 		E06B97C51B3283F400F095A7 /* MessageArray.m in Sources */ = {isa = PBXBuildFile; fileRef = E06B97C41B3283F400F095A7 /* MessageArray.m */; };
 		E0ECC02F1B30BFEF003FB68A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E0ECC02E1B30BFEF003FB68A /* main.m */; };
 		E0ECC0321B30BFEF003FB68A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E0ECC0311B30BFEF003FB68A /* AppDelegate.m */; };
@@ -30,6 +31,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E03503731B47C0490041555A /* MessageGateway.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageGateway.h; sourceTree = "<group>"; };
+		E03503741B47C0490041555A /* MessageGateway.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageGateway.m; sourceTree = "<group>"; };
 		E06B97C31B3283F400F095A7 /* MessageArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageArray.h; sourceTree = "<group>"; };
 		E06B97C41B3283F400F095A7 /* MessageArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageArray.m; sourceTree = "<group>"; };
 		E0ECC0291B30BFEF003FB68A /* Whatsapp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Whatsapp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -148,6 +151,8 @@
 				E06B97C41B3283F400F095A7 /* MessageArray.m */,
 				E0ECC05D1B30EEA2003FB68A /* MessageCell.h */,
 				E0ECC05E1B30EEA2003FB68A /* MessageCell.m */,
+				E03503731B47C0490041555A /* MessageGateway.h */,
+				E03503741B47C0490041555A /* MessageGateway.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -253,6 +258,7 @@
 			files = (
 				E0ECC0321B30BFEF003FB68A /* AppDelegate.m in Sources */,
 				E06B97C51B3283F400F095A7 /* MessageArray.m in Sources */,
+				E03503751B47C0490041555A /* MessageGateway.m in Sources */,
 				E0ECC0571B30DBF7003FB68A /* DAKeyboardControl.m in Sources */,
 				E0ECC05B1B30E7F2003FB68A /* Message.m in Sources */,
 				E0ECC05F1B30EEA2003FB68A /* MessageCell.m in Sources */,
