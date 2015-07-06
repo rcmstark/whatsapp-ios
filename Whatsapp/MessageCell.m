@@ -251,6 +251,7 @@
     status_frame.origin.y = time_frame.origin.y;
     _statusIcon = [[UIImageView alloc] initWithFrame:status_frame];
     _statusIcon.contentMode = UIViewContentModeLeft;
+    _statusIcon.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
     [self.contentView addSubview:_statusIcon];
 }
 -(void)setStatusIcon
