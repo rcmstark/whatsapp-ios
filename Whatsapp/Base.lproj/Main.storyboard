@@ -31,29 +31,11 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <view contentMode="scaleToFill" id="N97-jB-Cti" userLabel="toolBar">
-                                <rect key="frame" x="0.0" y="523" width="320" height="45"/>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="BEC-Sm-fje" customClass="TextInputbar">
+                                <rect key="frame" x="0.0" y="524" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="6Ui-ze-3tv">
-                                        <rect key="frame" x="262" y="0.0" width="58" height="45"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="Send">
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="send:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="YG3-F0-LQq"/>
-                                        </connections>
-                                    </button>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="dov-WH-5v1">
-                                        <rect key="frame" x="58" y="8" width="204" height="30"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
-                                    </textField>
-                                </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </view>
+                                <items/>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" red="0.93725490196078431" green="0.90980392156862744" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <gestureRecognizers/>
@@ -63,9 +45,8 @@
                     </view>
                     <navigationItem key="navigationItem" id="jNB-8g-sWu"/>
                     <connections>
+                        <outlet property="inputbar" destination="BEC-Sm-fje" id="egA-bK-G19"/>
                         <outlet property="tableView" destination="GTx-en-nG5" id="51h-2B-t2w"/>
-                        <outlet property="textField" destination="dov-WH-5v1" id="jyd-3s-mXC"/>
-                        <outlet property="toolBar" destination="N97-jB-Cti" id="8Bu-E3-81K"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>

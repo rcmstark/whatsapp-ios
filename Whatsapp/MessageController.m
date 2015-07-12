@@ -8,16 +8,16 @@
 
 #import "MessageController.h"
 #import "DAKeyboardControl.h"
+#import "TextInputbar.h"
 
 #import "Message.h"
 #import "MessageCell.h"
 #import "MessageGateway.h"
 
-@interface MessageController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, MessageGatewayDelegate>
+@interface MessageController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, MessageGatewayDelegate, TextInputbarDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UITextField *textField;
-@property (weak, nonatomic) IBOutlet UIView *toolBar;
+@property (weak, nonatomic) IBOutlet TextInputbar *inputbar;
 
 @property (assign, nonatomic) NSInteger changeSender;
 @property (strong, nonatomic) MessageGateway *gateway;
@@ -33,14 +33,14 @@
 {
     [super viewDidLoad];
     [self setTableView];
+    [self setInputbar];
     [self addTest];
-    self.textField.delegate = self;
 }
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     
-    UIView *toolBar = _toolBar;
+    UIView *toolBar = _inputbar;
     UITableView *tableView = _tableView;
     
     self.view.keyboardTriggerOffset = toolBar.frame.size.height;
@@ -67,6 +67,14 @@
 {
     [super viewDidDisappear:animated];
     [self.view removeKeyboardControl];
+}
+-(void)setInputbar
+{
+    self.inputbar.placeholder = nil;
+    self.inputbar.delegate = self;
+    self.inputbar.leftButtonImage = [UIImage imageNamed:@"share"];
+    self.inputbar.rightButtonText = @"Send";
+    self.inputbar.rightButtonTextColor = [UIColor colorWithRed:0 green:124/255.0 blue:1 alpha:1];
 }
 -(void)addTest
 {
@@ -103,42 +111,9 @@
 
 #pragma mark - Action
 
-- (IBAction)send:(UIButton *)button
-{
-    //Verify Empty Text
-    NSString *emptyText = [self.textField.text stringByReplacingOccurrencesOfString:@" " withString:@""];
-    if ([emptyText isEqualToString:@""]) return;
-    
-    //Add Message to MessageArray
-    Message *message = [[Message alloc] init];
-    message.text = self.textField.text;
-    message.sender = ++self.changeSender%2==0?MessageSenderSomeone:MessageSenderMyself;
-    message.sent = [NSDate date];
-    
-    [self.messageArray addMessage:message];
-    NSIndexPath *indexPath = [self.messageArray indexPathForMessage:message];
-    
-    [self.tableView beginUpdates];
-    if ([self.messageArray numberOfMessagesInSection:indexPath.section] == 1)
-        [self.tableView insertSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationNone];
-    [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-    [self.tableView endUpdates];
-    
-    [self.tableView scrollToRowAtIndexPath:[self.messageArray indexPathForLastMessage]
-                          atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-
-    self.textField.text = @"";
-    
-    if (!_gateway)
-    {
-        _gateway = [[MessageGateway alloc] init];
-        _gateway.delegate = self;
-    }
-    [_gateway sendMessage:message];
-}
 - (IBAction)userDidTapScreen:(id)sender
 {
-    [self.textField resignFirstResponder];
+    [self.inputbar resignFirstResponder];
 }
 
 #pragma mark - UITableViewDataSource
@@ -216,6 +191,45 @@
     [self.tableView beginUpdates];
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     [self.tableView endUpdates];
+}
+
+#pragma mark - TextInputbarDelegate
+
+-(void)inputbar:(TextInputbar *)inputbar didPressRightButton:(UIButton *)button
+{
+    //Add Message to MessageArray
+    Message *message = [[Message alloc] init];
+    message.text = inputbar.text;
+    message.sender = ++self.changeSender%2==0?MessageSenderSomeone:MessageSenderMyself;
+    message.sent = [NSDate date];
+    
+    [self.messageArray addMessage:message];
+    NSIndexPath *indexPath = [self.messageArray indexPathForMessage:message];
+    
+    [self.tableView beginUpdates];
+    if ([self.messageArray numberOfMessagesInSection:indexPath.section] == 1)
+        [self.tableView insertSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView endUpdates];
+    
+    [self.tableView scrollToRowAtIndexPath:[self.messageArray indexPathForLastMessage]
+                          atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    
+    if (!_gateway)
+    {
+        _gateway = [[MessageGateway alloc] init];
+        _gateway.delegate = self;
+    }
+    [_gateway sendMessage:message];
+}
+-(void)inputbar:(TextInputbar *)inputbar didPressLeftButton:(UIButton *)button
+{
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Left Button Pressed"
+                                                        message:nil
+                                                       delegate:nil
+                                              cancelButtonTitle:@"Ok"
+                                              otherButtonTitles:nil, nil];
+    [alertView show];
 }
 
 @end
