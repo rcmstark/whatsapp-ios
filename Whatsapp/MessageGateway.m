@@ -26,6 +26,11 @@
 }
 -(void)sendMessage:(Message *)message
 {
+    //
+    // Add here your code to send message to your server
+    // When you receive the response, you should update message status
+    // Now I'm just faking update message
+    //
     [self performSelector:@selector(updateMessageStatus:) withObject:message afterDelay:2.0];
 }
 -(void)updateMessageStatus:(Message *)message
@@ -39,6 +44,10 @@
     
     [self.delegate gatewayDidUpdateStatusForMessage:message];
     
+    //
+    // Remove this when connect to your server
+    // fake update message
+    //
     if (message.status != MessageStatusRead)
         [self sendMessage:message];
 }

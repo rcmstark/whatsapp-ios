@@ -1,30 +1,31 @@
 //
-//  TextInputbar.m
-//  GrowingTextViewExample
+//  Inputbar.h
+//  Whatsapp
 //
 //  Created by Rafael Castro on 7/11/15.
-//
+//  Copyright (c) 2015 HummingBird. All rights reserved.
 //
 
-#import "TextInputbar.h"
+#import "Inputbar.h"
 #import "HPGrowingTextView.h"
 
-@interface TextInputbar() <HPGrowingTextViewDelegate>
+@interface Inputbar() <HPGrowingTextViewDelegate>
 @property (nonatomic, strong) HPGrowingTextView *textView;
 @property (nonatomic, strong) UIButton *rightButton;
 @property (nonatomic, strong) UIButton *leftButton;
 @end
 
-#define BUTTON_SIZE 60
+#define RIGHT_BUTTON_SIZE 60
+#define LEFT_BUTTON_SIZE 45
 
-@implementation TextInputbar
+@implementation Inputbar
 
 -(id)init
 {
     self = [super init];
     if (self)
     {
-        [self viewDidLoad];
+        [self addContent];
     }
     return self;
 }
@@ -32,7 +33,7 @@
 {
     self = [super initWithFrame:frame];
     {
-        [self viewDidLoad];
+        [self addContent];
     }
     return self;
 }
@@ -40,11 +41,11 @@
 {
     if ((self = [super initWithCoder:aDecoder]))
     {
-        [self viewDidLoad];
+        [self addContent];
     }
     return self;
 }
--(void)viewDidLoad
+-(void)addContent
 {
     [self addTextView];
     [self addRightButton];
@@ -55,7 +56,10 @@
 -(void)addTextView
 {
     CGSize size = self.frame.size;
-    _textView = [[HPGrowingTextView alloc] initWithFrame:CGRectMake(6 + BUTTON_SIZE, 5, size.width - 2*BUTTON_SIZE - 6, size.height)];
+    _textView = [[HPGrowingTextView alloc] initWithFrame:CGRectMake(LEFT_BUTTON_SIZE,
+                                                                    5,
+                                                                    size.width - LEFT_BUTTON_SIZE - RIGHT_BUTTON_SIZE,
+                                                                    size.height)];
     _textView.isScrollable = NO;
     _textView.contentInset = UIEdgeInsetsMake(0, 5, 0, 5);
     
@@ -89,7 +93,7 @@
 {
     CGSize size = self.frame.size;
     self.rightButton = [[UIButton alloc] init];
-    self.rightButton.frame = CGRectMake(size.width - BUTTON_SIZE, 0, BUTTON_SIZE, size.height);
+    self.rightButton.frame = CGRectMake(size.width - RIGHT_BUTTON_SIZE, 0, RIGHT_BUTTON_SIZE, size.height);
     self.rightButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin;
     [self.rightButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
     [self.rightButton setTitle:@"Done" forState:UIControlStateNormal];
@@ -103,7 +107,7 @@
 {
     CGSize size = self.frame.size;
     self.leftButton = [[UIButton alloc] init];
-    self.leftButton.frame = CGRectMake(0, 0, BUTTON_SIZE, size.height);
+    self.leftButton.frame = CGRectMake(0, 0, LEFT_BUTTON_SIZE, size.height);
     self.leftButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin;
     [self.leftButton setImage:self.leftButtonImage forState:UIControlStateNormal];
     
@@ -129,12 +133,12 @@
     NSString *emptyText = [self.text stringByReplacingOccurrencesOfString:@" " withString:@""];
     if ([emptyText isEqualToString:@""]) return;
     
-    [self.delegate inputbar:self didPressRightButton:sender];
+    [self.delegate inputbarDidPressRightButton:self];
     self.textView.text = @"";
 }
 -(void)didPressLeftButton:(UIButton *)sender
 {
-    [self.delegate inputbar:self didPressLeftButton:sender];
+    [self.delegate inputbarDidPressLeftButton:self];
 }
 
 #pragma mark - Set Methods
@@ -167,6 +171,10 @@
     r.size.height -= diff;
     r.origin.y += diff;
     self.frame = r;
+}
+-(void)growingTextViewDidBeginEditing:(HPGrowingTextView *)growingTextView
+{
+    [self.delegate inputbarDidBecomeFirstResponder:self];
 }
 
 @end

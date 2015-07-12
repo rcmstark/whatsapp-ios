@@ -1,9 +1,9 @@
 //
-//  TextInputbar.h
-//  GrowingTextViewExample
+//  Inputbar.h
+//  Whatsapp
 //
 //  Created by Rafael Castro on 7/11/15.
-//
+//  Copyright (c) 2015 HummingBird. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
@@ -18,11 +18,11 @@
 // https://github.com/HansPinckaers/GrowingTextView
 //
 
-@protocol TextInputbarDelegate;
+@protocol InputbarDelegate;
 
-@interface TextInputbar : UIToolbar
+@interface Inputbar : UIToolbar
 
-@property (nonatomic) id<TextInputbarDelegate>delegate;
+@property (nonatomic, assign) id<InputbarDelegate>delegate;
 @property (nonatomic) NSString *placeholder;
 @property (nonatomic) UIImage *leftButtonImage;
 @property (nonatomic) NSString *rightButtonText;
@@ -35,7 +35,8 @@
 
 
 
-@protocol TextInputbarDelegate <NSObject>
--(void)inputbar:(TextInputbar *)inputbar didPressRightButton:(UIButton *)button;
--(void)inputbar:(TextInputbar *)inputbar didPressLeftButton:(UIButton *)button;
+@protocol InputbarDelegate <NSObject>
+-(void)inputbarDidPressRightButton:(Inputbar *)inputbar;
+-(void)inputbarDidPressLeftButton:(Inputbar *)inputbar;
+-(void)inputbarDidBecomeFirstResponder:(Inputbar *)inputbar;
 @end
