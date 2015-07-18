@@ -16,4 +16,8 @@ For now, I just support send text.
 
 Contributors are welcome!
 
+For Android, visit my friend project: https://github.com/DeromirNeves/whatsapp-android
+
+
+
 ![alt tag](https://raw.github.com/rcmcastro/whatsapp-ios/master/Screenshots/iOS Simulator Screen Shot Jun 18, 2015, 9.33.35 PM.png)
