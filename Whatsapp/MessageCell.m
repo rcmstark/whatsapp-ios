@@ -43,6 +43,7 @@
     
     [self addBubble];
     [self setBubble];
+    [self addShadowToBubble];
     
     [self addTimeLabel];
     [self setTimeLabel];
@@ -159,8 +160,6 @@
     //Set textView
     self.textView.autoresizingMask = autoresizing;
     self.bubbleImage.autoresizingMask = autoresizing;
-    
-    [self addShadowToBubble];
 }
 -(void)addShadowToBubble
 {
