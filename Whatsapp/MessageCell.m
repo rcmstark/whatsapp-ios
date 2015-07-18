@@ -9,9 +9,9 @@
 #import "MessageCell.h"
 
 @interface MessageCell ()
+@property (strong, nonatomic) UILabel *timeLabel;
 @property (strong, nonatomic) UITextView *textView;
 @property (strong, nonatomic) UIImageView *bubbleImage;
-@property (strong, nonatomic) UILabel *timeLabel;
 @property (strong, nonatomic) UIImageView *statusIcon;
 @end
 
@@ -29,7 +29,13 @@
 -(void)setMessage:(Message *)message
 {
     _message = message;
-    
+    [self rebuildCell];
+}
+
+#pragma mark - 
+
+-(void)rebuildCell
+{
     [self cleanView];
     
     [self addTextView];
@@ -44,14 +50,16 @@
     [self addStatusIcon];
     [self setStatusIcon];
 }
-
-#pragma mark - 
-
 -(void)awakeFromNib
 {
     self.backgroundColor = [UIColor clearColor];
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     self.contentView.backgroundColor = [UIColor clearColor];
+}
+-(void)prepareForReuse
+{
+    [super prepareForReuse];
+    [self cleanView];
 }
 -(void)cleanView
 {
@@ -61,6 +69,7 @@
     _textView = nil;
     _timeLabel = nil;
     _bubbleImage = nil;
+    _statusIcon = nil;
 }
 
 #pragma mark - TextView
@@ -256,7 +265,9 @@
 }
 -(void)setStatusIcon
 {
-    if (self.message.status == MessageStatusSent)
+    if (self.message.status == MessageStatusSending)
+        _statusIcon.image = [UIImage imageNamed:@"status_sending"];
+    else if (self.message.status == MessageStatusSent)
         _statusIcon.image = [UIImage imageNamed:@"status_sent"];
     else if (self.message.status == MessageStatusNotified)
         _statusIcon.image = [UIImage imageNamed:@"status_notified"];
