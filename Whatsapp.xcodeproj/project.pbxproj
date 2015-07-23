@@ -10,6 +10,8 @@
 		E03503751B47C0490041555A /* MessageGateway.m in Sources */ = {isa = PBXBuildFile; fileRef = E03503741B47C0490041555A /* MessageGateway.m */; };
 		E055D3B61B52FE5100994D12 /* Inputbar.m in Sources */ = {isa = PBXBuildFile; fileRef = E055D3B51B52FE5100994D12 /* Inputbar.m */; };
 		E06B97C51B3283F400F095A7 /* MessageArray.m in Sources */ = {isa = PBXBuildFile; fileRef = E06B97C41B3283F400F095A7 /* MessageArray.m */; };
+		E09372341B5AD82A0056FA8F /* API.m in Sources */ = {isa = PBXBuildFile; fileRef = E09372311B5AD82A0056FA8F /* API.m */; };
+		E09372351B5AD82A0056FA8F /* Connection.m in Sources */ = {isa = PBXBuildFile; fileRef = E09372331B5AD82A0056FA8F /* Connection.m */; };
 		E0D1AD581B522E1200609BE1 /* HPGrowingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = E0D1AD551B522E1200609BE1 /* HPGrowingTextView.m */; };
 		E0D1AD591B522E1200609BE1 /* HPTextViewInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = E0D1AD571B522E1200609BE1 /* HPTextViewInternal.m */; };
 		E0ECC02F1B30BFEF003FB68A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E0ECC02E1B30BFEF003FB68A /* main.m */; };
@@ -40,6 +42,10 @@
 		E055D3B51B52FE5100994D12 /* Inputbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Inputbar.m; sourceTree = "<group>"; };
 		E06B97C31B3283F400F095A7 /* MessageArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageArray.h; sourceTree = "<group>"; };
 		E06B97C41B3283F400F095A7 /* MessageArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageArray.m; sourceTree = "<group>"; };
+		E09372301B5AD82A0056FA8F /* API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = API.h; sourceTree = "<group>"; };
+		E09372311B5AD82A0056FA8F /* API.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = API.m; sourceTree = "<group>"; };
+		E09372321B5AD82A0056FA8F /* Connection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Connection.h; sourceTree = "<group>"; };
+		E09372331B5AD82A0056FA8F /* Connection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Connection.m; sourceTree = "<group>"; };
 		E0D1AD541B522E1200609BE1 /* HPGrowingTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPGrowingTextView.h; sourceTree = "<group>"; };
 		E0D1AD551B522E1200609BE1 /* HPGrowingTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HPGrowingTextView.m; sourceTree = "<group>"; };
 		E0D1AD561B522E1200609BE1 /* HPTextViewInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPTextViewInternal.h; sourceTree = "<group>"; };
@@ -165,6 +171,10 @@
 		E0ECC0581B30DBFC003FB68A /* Third-Party */ = {
 			isa = PBXGroup;
 			children = (
+				E09372301B5AD82A0056FA8F /* API.h */,
+				E09372311B5AD82A0056FA8F /* API.m */,
+				E09372321B5AD82A0056FA8F /* Connection.h */,
+				E09372331B5AD82A0056FA8F /* Connection.m */,
 				E0ECC0551B30DBF7003FB68A /* DAKeyboardControl.h */,
 				E0ECC0561B30DBF7003FB68A /* DAKeyboardControl.m */,
 				E0D1AD541B522E1200609BE1 /* HPGrowingTextView.h */,
@@ -237,6 +247,7 @@
 				TargetAttributes = {
 					E0ECC0281B30BFEF003FB68A = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = 94Y877W7B9;
 					};
 					E0ECC0411B30BFF0003FB68A = {
 						CreatedOnToolsVersion = 6.3.1;
@@ -293,8 +304,10 @@
 				E0ECC0571B30DBF7003FB68A /* DAKeyboardControl.m in Sources */,
 				E0D1AD591B522E1200609BE1 /* HPTextViewInternal.m in Sources */,
 				E0ECC05B1B30E7F2003FB68A /* Message.m in Sources */,
+				E09372341B5AD82A0056FA8F /* API.m in Sources */,
 				E0ECC05F1B30EEA2003FB68A /* MessageCell.m in Sources */,
 				E0D1AD581B522E1200609BE1 /* HPGrowingTextView.m in Sources */,
+				E09372351B5AD82A0056FA8F /* Connection.m in Sources */,
 				E055D3B61B52FE5100994D12 /* Inputbar.m in Sources */,
 				E0ECC02F1B30BFEF003FB68A /* main.m in Sources */,
 				E0ECC0541B30DA1D003FB68A /* MessageController.m in Sources */,
@@ -416,9 +429,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Whatsapp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -427,9 +444,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Whatsapp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

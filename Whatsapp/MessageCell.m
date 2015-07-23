@@ -79,7 +79,7 @@
 {
     CGFloat max_witdh = 0.7*self.contentView.frame.size.width;
     _textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, max_witdh, MAXFLOAT)];
-    _textView.font = [UIFont fontWithName:@"Helvetica" size:14.0];
+    _textView.font = [UIFont fontWithName:@"Helvetica" size:17.0];
     _textView.backgroundColor = [UIColor clearColor];
     _textView.userInteractionEnabled = NO;
     [self.contentView addSubview:_textView];
@@ -105,9 +105,11 @@
     CGFloat textView_y;
     CGFloat textView_width = _textView.frame.size.width;
     CGFloat textView_height = _textView.frame.size.height;
+    
+    //Margins to Bubble
     CGFloat textView_marginLeft;
     CGFloat textView_marginRight;
-    CGFloat textView_marginBottom = 5;
+    CGFloat textView_marginBottom = -3;
     
     //Bubble positions
     CGFloat bubble_x;
@@ -119,8 +121,8 @@
     
     if (self.message.sender == MessageSenderMyself)
     {
-        textView_marginLeft = 10;
-        textView_marginRight = 20;
+        textView_marginLeft = 3;
+        textView_marginRight = 15;
         bubble_x = self.contentView.frame.size.width - textView_width - textView_marginLeft - textView_marginRight - 1;
         bubble_y = 0;
         
@@ -128,7 +130,7 @@
                                   stretchableImageWithLeftCapWidth:15 topCapHeight:14];
         
         textView_x = bubble_x + textView_marginLeft;
-        textView_y = 0;
+        textView_y = -3;
         
         bubble_width = textView_width + 20;
         
@@ -184,6 +186,7 @@
     _timeLabel.textColor = [UIColor lightGrayColor];
     _timeLabel.font = [UIFont fontWithName:@"Helvetica" size:12.0];
     _timeLabel.userInteractionEnabled = NO;
+    _timeLabel.alpha = 0.7;
     [self.contentView addSubview:_timeLabel];
 }
 -(void)setTimeLabel

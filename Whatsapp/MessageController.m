@@ -34,6 +34,7 @@
     [super viewDidLoad];
     [self setTableView];
     [self setInputbar];
+    [self setGateway];
     [self addTest];
 }
 -(void)viewDidAppear:(BOOL)animated
@@ -62,6 +63,8 @@
         tableView.frame = tableViewFrame;
         
     }constraintBasedActionHandler:nil];
+    
+    [self.gateway news];
 }
 -(void)viewDidDisappear:(BOOL)animated
 {
@@ -72,7 +75,7 @@
 {
     NSMutableArray *array = [NSMutableArray new];
     
-    for (int i = 2; i > 0; i--)
+    for (int i = 0; i > 0; i--)
     {
         Message *message = [[Message alloc] init];
         message.text = [NSString stringWithFormat:@"This is a test message."];
@@ -100,17 +103,25 @@
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f,self.view.frame.size.width, 10.0f)];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
+-(void)setGateway
+{
+    self.gateway = [[MessageGateway alloc] init];
+    self.gateway.delegate = self;
+}
 -(void)scrollToBottomTableView
 {
-   [self.tableView scrollToRowAtIndexPath:[self.messageArray indexPathForLastMessage]
+    if (self.messageArray.numberOfMessages >= 3)
+    {
+        [self.tableView scrollToRowAtIndexPath:[self.messageArray indexPathForLastMessage]
                               atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    }
 }
 
 #pragma mark - Actions
 
 - (IBAction)userDidTapScreen:(id)sender
 {
-    [self.inputbar resignFirstResponder];
+    //[self.inputbar resignFirstResponder];
 }
 
 #pragma mark - UITableViewDataSource
@@ -185,6 +196,11 @@
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     [self.tableView endUpdates];
 }
+-(void)gatewayDidReceiveMessages:(NSArray *)array
+{
+    [self.messageArray addMessages:array];
+    [self.tableView reloadData];
+}
 
 #pragma mark - InputbarDelegate
 
@@ -193,7 +209,7 @@
     //Add Message to MessageArray
     Message *message = [[Message alloc] init];
     message.text = inputbar.text;
-    message.sender = ++self.changeSender%2==0?MessageSenderSomeone:MessageSenderMyself;
+    message.sender = MessageSenderMyself;
     message.sent = [NSDate date];
     
     [self.messageArray addMessage:message];
@@ -201,19 +217,15 @@
     
     [self.tableView beginUpdates];
     if ([self.messageArray numberOfMessagesInSection:indexPath.section] == 1)
-        [self.tableView insertSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView insertSections:[NSIndexSet indexSetWithIndex:indexPath.section]
+                      withRowAnimation:UITableViewRowAnimationNone];
     [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     [self.tableView endUpdates];
     
     [self.tableView scrollToRowAtIndexPath:[self.messageArray indexPathForLastMessage]
                           atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     
-    if (!_gateway)
-    {
-        _gateway = [[MessageGateway alloc] init];
-        _gateway.delegate = self;
-    }
-    [_gateway sendMessage:message];
+    [self.gateway sendMessage:message];
 }
 -(void)inputbarDidPressLeftButton:(Inputbar *)inputbar
 {

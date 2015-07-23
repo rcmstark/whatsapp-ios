@@ -20,9 +20,11 @@
 @interface MessageGateway : NSObject
 @property (assign, nonatomic) id<MessageGatewayDelegate> delegate;
 -(void)sendMessage:(Message *)message;
+-(void)news;
 @end
 
 
 @protocol MessageGatewayDelegate <NSObject>
 -(void)gatewayDidUpdateStatusForMessage:(Message *)message;
+-(void)gatewayDidReceiveMessages:(NSArray *)array;
 @end

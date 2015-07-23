@@ -21,6 +21,7 @@
 -(void)removeMessage:(Message *)message;
 -(void)removeMessages:(NSArray *)messages;
 -(void)removeAllMessages;
+-(NSInteger)numberOfMessages;
 -(NSInteger)numberOfSections;
 -(NSInteger)numberOfMessagesInSection:(NSInteger)section;
 -(NSString *)titleForSection:(NSInteger)section;

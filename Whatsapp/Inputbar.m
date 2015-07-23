@@ -96,12 +96,15 @@
     self.rightButton.frame = CGRectMake(size.width - RIGHT_BUTTON_SIZE, 0, RIGHT_BUTTON_SIZE, size.height);
     self.rightButton.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin;
     [self.rightButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [self.rightButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateSelected];
     [self.rightButton setTitle:@"Done" forState:UIControlStateNormal];
     self.rightButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:15.0];
     
     [self.rightButton addTarget:self action:@selector(didPressRightButton:) forControlEvents:UIControlEventTouchUpInside];
     
     [self addSubview:self.rightButton];
+    
+    [self.rightButton setSelected:YES];
 }
 -(void)addLeftButton
 {
@@ -129,9 +132,7 @@
 
 -(void)didPressRightButton:(UIButton *)sender
 {
-    //Verify Empty Text
-    NSString *emptyText = [self.text stringByReplacingOccurrencesOfString:@" " withString:@""];
-    if ([emptyText isEqualToString:@""]) return;
+    if (self.rightButton.isSelected) return;
     
     [self.delegate inputbarDidPressRightButton:self];
     self.textView.text = @"";
@@ -176,5 +177,14 @@
 {
     [self.delegate inputbarDidBecomeFirstResponder:self];
 }
+- (void)growingTextViewDidChange:(HPGrowingTextView *)growingTextView
+{
+    NSString *text = [growingTextView.text stringByReplacingOccurrencesOfString:@" " withString:@""];
+    if ([text isEqualToString:@""])
+        [self.rightButton setSelected:YES];
+    else
+        [self.rightButton setSelected:NO];
+}
+
 
 @end

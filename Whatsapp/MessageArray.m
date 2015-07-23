@@ -53,12 +53,24 @@
     [self.dictionary removeAllObjects];
     self.orderedKeys = nil;
 }
+-(NSInteger)numberOfMessages
+{
+    NSInteger num = 0;
+    for (NSString *key in self.dictionary)
+    {
+        NSArray *array = self.dictionary[key];
+        num += array.count;
+    }
+    return num;
+}
 -(NSInteger)numberOfSections
 {
     return [self.dictionary allKeys].count;
 }
 -(NSInteger)numberOfMessagesInSection:(NSInteger)section
 {
+    NSArray *orderedKeys = [self orderedKeys];
+    if (orderedKeys.count == 0) return 0;
     NSString *key = [self orderedKeys][section];
     NSArray *array = [self.dictionary valueForKey:key];
     return array.count;
