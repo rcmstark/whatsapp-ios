@@ -9,8 +9,11 @@
 #import "MessageArray.h"
 
 @interface MessageArray ()
-@property (strong, nonatomic) NSMutableDictionary *dictionary;
-@property (strong, nonatomic) NSArray *orderedKeys;
+@property (strong, nonatomic) NSMutableDictionary *mapTitleToMessages;
+@property (strong, nonatomic) NSArray *orderedTitles;
+@property (assign, nonatomic) NSInteger numberOfSections;
+@property (assign, nonatomic) NSInteger numberOfMessages;
+@property (strong, nonatomic) NSDateFormatter *formatter;
 @end
 
 @implementation MessageArray
@@ -20,146 +23,150 @@
     self = [super init];
     if (self)
     {
-        self.dictionary = [[NSMutableDictionary alloc] init];
+        self.orderedTitles = [[NSArray alloc] init];
+        self.mapTitleToMessages = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
--(void)addMessage:(Message *)message
+-(void)addObject:(Message *)message
 {
-    return [self addMessage:message refreshCahe:YES];
+    return [self addMessage:message];
 }
--(void)addMessages:(NSArray *)messages
+-(void)addObjectsFromArray:(NSArray *)messages
 {
     for (Message *message in messages)
     {
-        [self addMessage:message refreshCahe:NO];
+        [self addMessage:message];
     }
-    [self cacheKeys];
 }
--(void)removeMessage:(Message *)message
+-(void)removeObject:(Message *)message
 {
-    [self removeMessage:message refreshCache:YES];
+    [self removeMessage:message];
 }
--(void)removeMessages:(NSArray *)messages
+-(void)removeObjectsInArray:(NSArray *)messages
 {
     for (Message *message in messages)
     {
-        [self removeMessage:message refreshCache:NO];
+        [self removeMessage:message];
     }
-    [self cacheKeys];
 }
--(void)removeAllMessages
+-(void)removeAllObjects
 {
-    [self.dictionary removeAllObjects];
-    self.orderedKeys = nil;
+    [self.mapTitleToMessages removeAllObjects];
+    self.orderedTitles = nil;
 }
 -(NSInteger)numberOfMessages
 {
-    NSInteger num = 0;
-    for (NSString *key in self.dictionary)
-    {
-        NSArray *array = self.dictionary[key];
-        num += array.count;
-    }
-    return num;
+    return _numberOfMessages;
 }
 -(NSInteger)numberOfSections
 {
-    return [self.dictionary allKeys].count;
+    return _numberOfSections;
 }
 -(NSInteger)numberOfMessagesInSection:(NSInteger)section
 {
-    NSArray *orderedKeys = [self orderedKeys];
-    if (orderedKeys.count == 0) return 0;
-    NSString *key = [self orderedKeys][section];
-    NSArray *array = [self.dictionary valueForKey:key];
+    if (self.orderedTitles.count == 0) return 0;
+    NSString *key = self.orderedTitles[section];
+    NSArray *array = [self.mapTitleToMessages valueForKey:key];
     return array.count;
 }
 -(NSString *)titleForSection:(NSInteger)section
 {
-    NSDateFormatter *formatter = [self formatter];
-    NSString *key = [self orderedKeys][section];
+    NSDateFormatter *formatter = [self.formatter copy];
+    NSString *key = self.orderedTitles[section];
     NSDate *date = [formatter dateFromString:key];
     
     formatter.doesRelativeDateFormatting = YES;
     return [formatter stringFromDate:date];
 }
--(Message *)messageAtIndexPath:(NSIndexPath *)indexPath
+-(Message *)objectAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *key = [self orderedKeys][indexPath.section];
-    NSArray *array = [self.dictionary valueForKey:key];
+    NSString *key = self.orderedTitles[indexPath.section];
+    NSArray *array = [self.mapTitleToMessages valueForKey:key];
     return array[indexPath.row];
 }
 -(NSIndexPath *)indexPathForLastMessage
 {
-    NSInteger lastSection = [self numberOfSections]-1;
+    NSInteger lastSection = _numberOfSections-1;
     NSInteger numberOfMessages = [self numberOfMessagesInSection:lastSection];
     return [NSIndexPath indexPathForRow:numberOfMessages-1 inSection:lastSection];
 }
 -(NSIndexPath *)indexPathForMessage:(Message *)message
 {
     NSString *key = [self keyForMessage:message];
-    NSInteger section = [[self orderedKeys] indexOfObject:key];
-    NSInteger row = [[self.dictionary valueForKey:key] indexOfObject:message];
+    NSInteger section = [self.orderedTitles indexOfObject:key];
+    NSInteger row = [[self.mapTitleToMessages valueForKey:key] indexOfObject:message];
     return [NSIndexPath indexPathForRow:row inSection:section];
 }
 
 #pragma mark - Helpers
 
--(void)addMessage:(Message *)message refreshCahe:(BOOL)refresh
+-(void)addMessage:(Message *)message
 {
     NSString *key = [self keyForMessage:message];
-    NSMutableArray *array = [self.dictionary valueForKey:key];
+    NSMutableArray *array = [self.mapTitleToMessages valueForKey:key];
     if (!array)
     {
+        _numberOfSections += 1;
         array = [[NSMutableArray alloc] init];
     }
+    
     [array addObject:message];
     [array sortedArrayUsingComparator:^NSComparisonResult(Message *m1, Message *m2)
      {
          return [m1.sent compare: m2.sent];
      }];
-    [self.dictionary setValue:array forKey:key];
-    if (refresh)
-        [self cacheKeys];
+    
+    [self.mapTitleToMessages setValue:array forKey:key];
+    [self cacheTitles];
+    
+    _numberOfMessages += 1;
 }
--(void)removeMessage:(Message *)message refreshCache:(BOOL)refresh
+-(void)removeMessage:(Message *)message
 {
     NSString *key = [self keyForMessage:message];
-    NSMutableArray *array = [self.dictionary valueForKey:key];
+    NSMutableArray *array = [self.mapTitleToMessages valueForKey:key];
     if (array)
     {
         [array removeObject:message];
-        [self.dictionary setValue:array forKey:key];
+        if (array.count == 0)
+        {
+            _numberOfSections -= 1;
+            [self.mapTitleToMessages removeObjectForKey:key];
+            [self cacheTitles];
+        }
+        else
+            [self.mapTitleToMessages setValue:array forKey:key];
+        
+        _numberOfMessages -= 1;
     }
-    if (refresh)
-        [self cacheKeys];
 }
--(void)cacheKeys
+-(void)cacheTitles
 {
-    NSArray *array = [self.dictionary allKeys];
+    NSArray *array = [self.mapTitleToMessages allKeys];
     NSArray *orderedArray = [array sortedArrayUsingComparator:^NSComparisonResult(NSString *dateString1, NSString *dateString2)
                              {
-                                 NSDateFormatter *formatter = [self formatter];
-                                 NSDate *d1 = [formatter dateFromString:dateString1];
-                                 NSDate *d2 = [formatter dateFromString:dateString2];
+                                 NSDate *d1 = [self.formatter dateFromString:dateString1];
+                                 NSDate *d2 = [self.formatter dateFromString:dateString2];
                                  return [d1 compare: d2];;
                              }];
-    
-    self.orderedKeys  = [[NSArray alloc] initWithArray:orderedArray];
+    self.orderedTitles  = [[NSArray alloc] initWithArray:orderedArray];
 }
 -(NSString *)keyForMessage:(Message *)message
 {
-    NSDateFormatter *df = [self formatter];
-    return [df stringFromDate:message.sent];
+    return [self.formatter stringFromDate:message.sent];
 }
 -(NSDateFormatter *)formatter
 {
-    NSDateFormatter *df = [[NSDateFormatter alloc] init];
-    df.timeStyle = NSDateFormatterNoStyle;
-    df.dateStyle = NSDateFormatterShortStyle;
-    df.doesRelativeDateFormatting = NO;
-    return df;
+    if (!_formatter)
+    {
+        _formatter = [[NSDateFormatter alloc] init];
+        _formatter.timeStyle = NSDateFormatterNoStyle;
+        _formatter.dateStyle = NSDateFormatterShortStyle;
+        _formatter.doesRelativeDateFormatting = NO;
+        
+    }
+    return _formatter;
 }
 
 

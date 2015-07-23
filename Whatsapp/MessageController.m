@@ -75,7 +75,7 @@ UITableViewDataSource,UITableViewDelegate>
 }
 -(void)addTest
 {
-    [self.messageArray removeAllMessages];
+    [self.messageArray removeAllObjects];
     for (int i = 20; i > 0; i--)
     {
         Message *message = [[Message alloc] init];
@@ -84,7 +84,7 @@ UITableViewDataSource,UITableViewDelegate>
         message.status = MessageStatusRead;
         message.sender = MessageSenderMyself;
         
-        [self.messageArray addMessage:message];
+        [self.messageArray addObject:message];
     }
 }
 
@@ -139,7 +139,7 @@ UITableViewDataSource,UITableViewDelegate>
     {
         cell = [[MessageCell alloc] init];
     }
-    cell.message = [self.messageArray messageAtIndexPath:indexPath];
+    cell.message = [self.messageArray objectAtIndexPath:indexPath];
     return cell;
 }
 
@@ -147,7 +147,7 @@ UITableViewDataSource,UITableViewDelegate>
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    Message *message = [self.messageArray messageAtIndexPath:indexPath];
+    Message *message = [self.messageArray objectAtIndexPath:indexPath];
     return message.heigh;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -191,7 +191,7 @@ UITableViewDataSource,UITableViewDelegate>
     message.sent = [NSDate date];
     
     //Store Message in memory
-    [self.messageArray addMessage:message];
+    [self.messageArray addObject:message];
     
     //Insert Message in UI
     NSIndexPath *indexPath = [self.messageArray indexPathForMessage:message];
@@ -229,7 +229,7 @@ UITableViewDataSource,UITableViewDelegate>
 }
 -(void)gatewayDidReceiveMessages:(NSArray *)array
 {
-    [self.messageArray addMessages:array];
+    [self.messageArray addObjectsFromArray:array];
     [self.tableView reloadData];
 }
 

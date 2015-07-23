@@ -16,16 +16,16 @@
 //
 @interface MessageArray : NSObject
 
--(void)addMessage:(Message *)message;
--(void)addMessages:(NSArray *)messages;
--(void)removeMessage:(Message *)message;
--(void)removeMessages:(NSArray *)messages;
--(void)removeAllMessages;
+-(void)addObject:(Message *)message;
+-(void)addObjectsFromArray:(NSArray *)messages;
+-(void)removeObject:(Message *)message;
+-(void)removeObjectsInArray:(NSArray *)messages;
+-(void)removeAllObjects;
 -(NSInteger)numberOfMessages;
 -(NSInteger)numberOfSections;
 -(NSInteger)numberOfMessagesInSection:(NSInteger)section;
 -(NSString *)titleForSection:(NSInteger)section;
--(Message *)messageAtIndexPath:(NSIndexPath *)indexPath;
+-(Message *)objectAtIndexPath:(NSIndexPath *)indexPath;
 -(NSIndexPath *)indexPathForLastMessage;
 -(NSIndexPath *)indexPathForMessage:(Message *)message;
 
