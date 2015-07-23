@@ -175,7 +175,10 @@
 }
 -(void)growingTextViewDidBeginEditing:(HPGrowingTextView *)growingTextView
 {
-    [self.delegate inputbarDidBecomeFirstResponder:self];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(inputbarDidBecomeFirstResponder:)])
+    {
+        [self.delegate inputbarDidBecomeFirstResponder:self];
+    }
 }
 - (void)growingTextViewDidChange:(HPGrowingTextView *)growingTextView
 {

@@ -2,7 +2,7 @@
 //  MessageCell.h
 //  Whatsapp
 //
-//  Created by Rafael Castro on 6/16/15.
+//  Created by Rafael Castro on 7/23/15.
 //  Copyright (c) 2015 HummingBird. All rights reserved.
 //
 
@@ -16,8 +16,5 @@
 
 //Estimate BubbleCell Height
 -(CGFloat)height;
-
-//Estimate BubbleCell Witdh
--(CGFloat)width;
-
+-(void)updateMessageStatus;
 @end

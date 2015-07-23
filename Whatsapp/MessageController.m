@@ -1,25 +1,25 @@
 //
-//  ChatController.m
+//  MessageController.m
 //  Whatsapp
 //
-//  Created by Rafael Castro on 6/16/15.
+//  Created by Rafael Castro on 7/23/15.
 //  Copyright (c) 2015 HummingBird. All rights reserved.
 //
 
 #import "MessageController.h"
-#import "DAKeyboardControl.h"
-#import "Inputbar.h"
-
-#import "Message.h"
 #import "MessageCell.h"
+#import "MessageArray.h"
 #import "MessageGateway.h"
 
-@interface MessageController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, MessageGatewayDelegate, InputbarDelegate>
+#import "Inputbar.h"
+#import "DAKeyboardControl.h"
+
+@interface MessageController() <InputbarDelegate,MessageGatewayDelegate,
+UITableViewDataSource,UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet Inputbar *inputbar;
-
-@property (assign, nonatomic) NSInteger changeSender;
+@property (strong, nonatomic) MessageArray *messageArray;
 @property (strong, nonatomic) MessageGateway *gateway;
 
 @end
@@ -32,8 +32,8 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-    [self setTableView];
     [self setInputbar];
+    [self setTableView];
     [self setGateway];
     [self addTest];
 }
@@ -45,9 +45,8 @@
     UITableView *tableView = _tableView;
     
     self.view.keyboardTriggerOffset = toolBar.frame.size.height;
-    [self.view addKeyboardPanningWithFrameBasedActionHandler:^(CGRect keyboardFrameInView, BOOL opening, BOOL closing) {
-        
-         /*
+    [self.view addKeyboardPanningWithActionHandler:^(CGRect keyboardFrameInView, BOOL opening, BOOL closing) {
+        /*
          Try not to call "self" inside this block (retain cycle).
          But if you do, make sure to remove DAKeyboardControl
          when you are done with the view controller by calling:
@@ -62,31 +61,35 @@
         tableViewFrame.size.height = toolBarFrame.origin.y - 64;
         tableView.frame = tableViewFrame;
         
-    }constraintBasedActionHandler:nil];
+        CGPoint offset = tableView.contentOffset;
+        offset.y = tableView.contentSize.height - tableView.frame.size.height;
+        [tableView setContentOffset:offset animated:NO];
+    }];
     
-    [self.gateway news];
 }
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
+    [self.view endEditing:YES];
     [self.view removeKeyboardControl];
 }
 -(void)addTest
 {
-    NSMutableArray *array = [NSMutableArray new];
-    
-    for (int i = 0; i > 0; i--)
+    [self.messageArray removeAllMessages];
+    for (int i = 20; i > 0; i--)
     {
         Message *message = [[Message alloc] init];
-        message.text = [NSString stringWithFormat:@"This is a test message."];
-        message.sender = ++self.changeSender%2==0?MessageSenderSomeone:MessageSenderMyself;
-        message.sent = [[NSDate date] dateByAddingTimeInterval:-i*24*60*60];;
+        message.text = [NSString stringWithFormat:@"%d: This is a teste message.",i];
+        message.sent = [[NSDate date] dateByAddingTimeInterval:-i*24*60*60];
         message.status = MessageStatusRead;
+        message.sender = MessageSenderMyself;
         
-        [array addObject:message];
+        [self.messageArray addMessage:message];
     }
-    [self.messageArray addMessages:array];
 }
+
+#pragma mark -
+
 -(void)setInputbar
 {
     self.inputbar.placeholder = nil;
@@ -102,29 +105,23 @@
     self.tableView.dataSource = self;
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f,self.view.frame.size.width, 10.0f)];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.backgroundColor = [UIColor clearColor];
+    [self.tableView registerClass:[MessageCell class] forCellReuseIdentifier: @"MessageCell"];
 }
 -(void)setGateway
 {
     self.gateway = [[MessageGateway alloc] init];
     self.gateway.delegate = self;
 }
--(void)scrollToBottomTableView
-{
-    if (self.messageArray.numberOfMessages >= 3)
-    {
-        [self.tableView scrollToRowAtIndexPath:[self.messageArray indexPathForLastMessage]
-                              atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-    }
-}
 
 #pragma mark - Actions
 
 - (IBAction)userDidTapScreen:(id)sender
 {
-    //[self.inputbar resignFirstResponder];
+    [_inputbar resignFirstResponder];
 }
 
-#pragma mark - UITableViewDataSource
+#pragma mark - TableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -137,14 +134,12 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"MessageCell";
-    MessageCell *cell = (MessageCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil)
+    MessageCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (!cell)
     {
-        cell = [[MessageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell = [[MessageCell alloc] init];
     }
-    Message *message = [self.messageArray messageAtIndexPath:indexPath];
-    cell.message = message;
-
+    cell.message = [self.messageArray messageAtIndexPath:indexPath];
     return cell;
 }
 
@@ -152,12 +147,20 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    MessageCell *cell = (MessageCell *) [self tableView:tableView cellForRowAtIndexPath:indexPath];
-    return cell?cell.height:22;
+    Message *message = [self.messageArray messageAtIndexPath:indexPath];
+    return message.heigh;
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 40.0;
+}
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return [self.messageArray titleForSection:section];
 }
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    CGRect frame = CGRectMake(0, 0, self.view.frame.size.width, 40);
+    CGRect frame = CGRectMake(0, 0, tableView.frame.size.width, 40);
     
     UIView *view = [[UIView alloc] initWithFrame:frame];
     view.backgroundColor = [UIColor clearColor];
@@ -178,53 +181,32 @@
     
     return view;
 }
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 40.0;
-}
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    return [self.messageArray titleForSection:section];
-}
-
-#pragma mark - MessageGatewayDelegate
-
--(void)gatewayDidUpdateStatusForMessage:(Message *)message
-{
-    NSIndexPath *indexPath = [self.messageArray indexPathForMessage:message];
-    [self.tableView beginUpdates];
-    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-    [self.tableView endUpdates];
-}
--(void)gatewayDidReceiveMessages:(NSArray *)array
-{
-    [self.messageArray addMessages:array];
-    [self.tableView reloadData];
-}
 
 #pragma mark - InputbarDelegate
 
 -(void)inputbarDidPressRightButton:(Inputbar *)inputbar
 {
-    //Add Message to MessageArray
     Message *message = [[Message alloc] init];
     message.text = inputbar.text;
-    message.sender = MessageSenderMyself;
     message.sent = [NSDate date];
     
+    //Store Message in memory
     [self.messageArray addMessage:message];
-    NSIndexPath *indexPath = [self.messageArray indexPathForMessage:message];
     
+    //Insert Message in UI
+    NSIndexPath *indexPath = [self.messageArray indexPathForMessage:message];
     [self.tableView beginUpdates];
     if ([self.messageArray numberOfMessagesInSection:indexPath.section] == 1)
         [self.tableView insertSections:[NSIndexSet indexSetWithIndex:indexPath.section]
                       withRowAnimation:UITableViewRowAnimationNone];
-    [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView insertRowsAtIndexPaths:@[indexPath]
+                          withRowAnimation:UITableViewRowAnimationNone];
     [self.tableView endUpdates];
     
     [self.tableView scrollToRowAtIndexPath:[self.messageArray indexPathForLastMessage]
                           atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     
+    //Send message to server
     [self.gateway sendMessage:message];
 }
 -(void)inputbarDidPressLeftButton:(Inputbar *)inputbar
@@ -236,9 +218,21 @@
                                               otherButtonTitles:nil, nil];
     [alertView show];
 }
--(void)inputbarDidBecomeFirstResponder:(Inputbar *)inputbar
+
+#pragma mark - MessageGatewayDelegate
+
+-(void)gatewayDidUpdateStatusForMessage:(Message *)message
 {
-    [self performSelector:@selector(scrollToBottomTableView) withObject:nil afterDelay:.3];
+    NSIndexPath *indexPath = [self.messageArray indexPathForMessage:message];
+    MessageCell *cell = (MessageCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+    [cell updateMessageStatus];
 }
+-(void)gatewayDidReceiveMessages:(NSArray *)array
+{
+    [self.messageArray addMessages:array];
+    [self.tableView reloadData];
+}
+
+
 
 @end

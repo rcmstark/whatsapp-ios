@@ -28,11 +28,12 @@ typedef NS_ENUM(NSInteger, MessageSender)
 
 @interface Message : NSObject
 
-@property (strong, nonatomic) NSString *identifier;
 @property (assign, nonatomic) MessageSender sender;
 @property (assign, nonatomic) MessageStatus status;
+@property (strong, nonatomic) NSString *identifier;
 @property (strong, nonatomic) NSString *text;
 @property (strong, nonatomic) NSDate *sent;
+@property (assign, nonatomic) CGFloat heigh;
 
 +(Message *)messageFromDictionary:(NSDictionary *)dictionary;
 @end

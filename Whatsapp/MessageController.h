@@ -7,8 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MessageArray.h"
 
 @interface MessageController : UIViewController
-@property (strong, nonatomic) MessageArray *messageArray;
 @end

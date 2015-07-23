@@ -10,8 +10,6 @@
 		E03503751B47C0490041555A /* MessageGateway.m in Sources */ = {isa = PBXBuildFile; fileRef = E03503741B47C0490041555A /* MessageGateway.m */; };
 		E055D3B61B52FE5100994D12 /* Inputbar.m in Sources */ = {isa = PBXBuildFile; fileRef = E055D3B51B52FE5100994D12 /* Inputbar.m */; };
 		E06B97C51B3283F400F095A7 /* MessageArray.m in Sources */ = {isa = PBXBuildFile; fileRef = E06B97C41B3283F400F095A7 /* MessageArray.m */; };
-		E09372341B5AD82A0056FA8F /* API.m in Sources */ = {isa = PBXBuildFile; fileRef = E09372311B5AD82A0056FA8F /* API.m */; };
-		E09372351B5AD82A0056FA8F /* Connection.m in Sources */ = {isa = PBXBuildFile; fileRef = E09372331B5AD82A0056FA8F /* Connection.m */; };
 		E0D1AD581B522E1200609BE1 /* HPGrowingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = E0D1AD551B522E1200609BE1 /* HPGrowingTextView.m */; };
 		E0D1AD591B522E1200609BE1 /* HPTextViewInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = E0D1AD571B522E1200609BE1 /* HPTextViewInternal.m */; };
 		E0ECC02F1B30BFEF003FB68A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E0ECC02E1B30BFEF003FB68A /* main.m */; };
@@ -97,15 +95,13 @@
 			name = Helpers;
 			sourceTree = "<group>";
 		};
-		E0D569B11B4AD721007063C7 /* WhatsappController */ = {
+		E0DFF2A01B618CA50000E784 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
 				E0ECC05D1B30EEA2003FB68A /* MessageCell.h */,
 				E0ECC05E1B30EEA2003FB68A /* MessageCell.m */,
-				E0ECC0521B30DA1D003FB68A /* MessageController.h */,
-				E0ECC0531B30DA1D003FB68A /* MessageController.m */,
 			);
-			name = WhatsappController;
+			name = Cell;
 			sourceTree = "<group>";
 		};
 		E0ECC0201B30BFEF003FB68A = {
@@ -133,7 +129,9 @@
 				E0ECC0311B30BFEF003FB68A /* AppDelegate.m */,
 				E0ECC0361B30BFEF003FB68A /* Main.storyboard */,
 				E0ECC0391B30BFEF003FB68A /* Images.xcassets */,
-				E0D569B11B4AD721007063C7 /* WhatsappController */,
+				E0ECC0521B30DA1D003FB68A /* MessageController.h */,
+				E0ECC0531B30DA1D003FB68A /* MessageController.m */,
+				E0DFF2A01B618CA50000E784 /* Cell */,
 				E0D1AD5D1B522E2C00609BE1 /* Helpers */,
 				E0ECC05C1B30E8A6003FB68A /* Model */,
 				E0ECC0581B30DBFC003FB68A /* Third-Party */,
@@ -304,10 +302,8 @@
 				E0ECC0571B30DBF7003FB68A /* DAKeyboardControl.m in Sources */,
 				E0D1AD591B522E1200609BE1 /* HPTextViewInternal.m in Sources */,
 				E0ECC05B1B30E7F2003FB68A /* Message.m in Sources */,
-				E09372341B5AD82A0056FA8F /* API.m in Sources */,
 				E0ECC05F1B30EEA2003FB68A /* MessageCell.m in Sources */,
 				E0D1AD581B522E1200609BE1 /* HPGrowingTextView.m in Sources */,
-				E09372351B5AD82A0056FA8F /* Connection.m in Sources */,
 				E055D3B61B52FE5100994D12 /* Inputbar.m in Sources */,
 				E0ECC02F1B30BFEF003FB68A /* main.m in Sources */,
 				E0ECC0541B30DA1D003FB68A /* MessageController.m in Sources */,

@@ -38,5 +38,6 @@
 @protocol InputbarDelegate <NSObject>
 -(void)inputbarDidPressRightButton:(Inputbar *)inputbar;
 -(void)inputbarDidPressLeftButton:(Inputbar *)inputbar;
+@optional
 -(void)inputbarDidBecomeFirstResponder:(Inputbar *)inputbar;
 @end

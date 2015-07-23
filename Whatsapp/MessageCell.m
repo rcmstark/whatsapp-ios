@@ -2,11 +2,12 @@
 //  MessageCell.m
 //  Whatsapp
 //
-//  Created by Rafael Castro on 6/16/15.
+//  Created by Rafael Castro on 7/23/15.
 //  Copyright (c) 2015 HummingBird. All rights reserved.
 //
 
 #import "MessageCell.h"
+
 
 @interface MessageCell ()
 @property (strong, nonatomic) UILabel *timeLabel;
@@ -15,43 +16,49 @@
 @property (strong, nonatomic) UIImageView *statusIcon;
 @end
 
-@implementation MessageCell
 
+@implementation MessageCell
 
 -(CGFloat)height
 {
     return _bubbleImage.frame.size.height;
 }
--(CGFloat)width
+-(void)updateMessageStatus
 {
-    return _bubbleImage.frame.size.width;
-}
--(void)setMessage:(Message *)message
-{
-    _message = message;
-    [self rebuildCell];
-}
-
-#pragma mark - 
-
--(void)rebuildCell
-{
-    [self cleanView];
-    
-    [self addTextView];
-    [self setTextView];
-    
-    [self addBubble];
-    [self setBubble];
-    [self addShadowToBubble];
-    
-    [self addTimeLabel];
-    [self setTimeLabel];
-    
-    [self addStatusIcon];
     [self setStatusIcon];
+    //Animate Transition
+    _statusIcon.alpha = 0;
+    [UIView animateWithDuration:.5 animations:^{
+        _statusIcon.alpha = 1;
+    }];
+    [self setNeedsDisplay];
 }
--(void)awakeFromNib
+
+#pragma mark -
+
+-(id)init
+{
+    self = [super init];
+    if (self)
+    {
+        [self commonInit];
+    }
+    return self;
+}
+-(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self)
+    {
+        [self commonInit];
+    }
+    return self;
+}
+-(void)layoutSubviews
+{
+    [self commonInit];
+}
+-(void)commonInit
 {
     self.backgroundColor = [UIColor clearColor];
     self.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -59,18 +66,32 @@
 }
 -(void)prepareForReuse
 {
-    [super prepareForReuse];
-    [self cleanView];
-}
--(void)cleanView
-{
-    for (UIView *view in self.contentView.subviews)
-        [view removeFromSuperview];
-    
+    [self.contentView.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
     _textView = nil;
-    _timeLabel = nil;
     _bubbleImage = nil;
+    _timeLabel = nil;
     _statusIcon = nil;
+}
+-(void)setMessage:(Message *)message
+{
+    _message = message;
+    [self buildCell];
+    
+    message.heigh = self.height;
+}
+-(void)buildCell
+{
+    [self addTextView];
+    [self setTextView];
+    
+    [self addTimeLabel];
+    [self setTimeLabel];
+    
+    [self addBubble];
+    [self setBubble];
+    
+    [self addStatusIcon];
+    [self setStatusIcon];
 }
 
 #pragma mark - TextView
@@ -88,105 +109,41 @@
 {
     _textView.text = _message.text;
     [_textView sizeToFit];
-}
-
-#pragma mark - BubbleImage
-
--(void)addBubble
-{
-    _bubbleImage = [[UIImageView alloc] init];
-    _bubbleImage.userInteractionEnabled = YES;
-    [self.contentView insertSubview:_bubbleImage belowSubview:_textView];
-}
-- (void)setBubble
-{
-    //Estimation of TextView Size
+    
     CGFloat textView_x;
     CGFloat textView_y;
-    CGFloat textView_width = _textView.frame.size.width;
-    CGFloat textView_height = _textView.frame.size.height;
-    
-    //Margins to Bubble
-    CGFloat textView_marginLeft;
-    CGFloat textView_marginRight;
-    CGFloat textView_marginBottom = -3;
-    
-    //Bubble positions
-    CGFloat bubble_x;
-    CGFloat bubble_y;
-    CGFloat bubble_width;
-    CGFloat bubble_height;
-    
+    CGFloat textView_w = _textView.frame.size.width;
+    CGFloat textView_h = _textView.frame.size.height;
     UIViewAutoresizing autoresizing;
     
-    if (self.message.sender == MessageSenderMyself)
+    if (_message.sender == MessageSenderMyself)
     {
-        textView_marginLeft = 3;
-        textView_marginRight = 15;
-        bubble_x = self.contentView.frame.size.width - textView_width - textView_marginLeft - textView_marginRight - 1;
-        bubble_y = 0;
-        
-        self.bubbleImage.image = [[UIImage imageNamed:@"bubbleMine"]
-                                  stretchableImageWithLeftCapWidth:15 topCapHeight:14];
-        
-        textView_x = bubble_x + textView_marginLeft;
+        textView_x = self.contentView.frame.size.width - textView_w - 20;
         textView_y = -3;
-        
-        bubble_width = textView_width + 20;
-        
         autoresizing = UIViewAutoresizingFlexibleLeftMargin;
+        textView_x -= [self isSingleLineCase]?65.0:0.0;
     }
     else
     {
-        bubble_x = 2;
-        bubble_y = 1;
-        
-        self.bubbleImage.image = [[UIImage imageNamed:@"bubbleSomeone"]
-                                  stretchableImageWithLeftCapWidth:21 topCapHeight:14];
-        
-        textView_marginLeft = 15;
-        textView_marginRight = 15;
-        textView_x = bubble_x + textView_marginLeft;
-        textView_y = 0;
-    
+        textView_x = 20;
+        textView_y = -3;
         autoresizing = UIViewAutoresizingFlexibleRightMargin;
     }
     
-    bubble_width = textView_width + textView_marginLeft + textView_marginRight;
-    bubble_height = textView_height + textView_marginBottom;
-    
-    //Set frame
-    self.textView.frame = CGRectMake(textView_x, textView_y, textView_width, textView_height);
-    self.bubbleImage.frame = CGRectMake(bubble_x, bubble_y, bubble_width, bubble_height);
-    
-    //Set textView
-    self.textView.autoresizingMask = autoresizing;
-    self.bubbleImage.autoresizingMask = autoresizing;
-}
--(void)addShadowToBubble
-{
-    UIImageView *imageView = self.bubbleImage;
-    //shadow part
-    imageView.layer.shadowColor = [UIColor blackColor].CGColor;
-    imageView.layer.shadowOffset = CGSizeMake(0, 1);
-    imageView.layer.shadowOpacity = .2;
-    imageView.layer.shadowRadius = .5;
-    
-    //Add performace to shadow creation
-    //If you remove this code, scroll in tableView will become slow
-    imageView.layer.shouldRasterize = YES;
-    imageView.layer.rasterizationScale = UIScreen.mainScreen.scale;
+    _textView.autoresizingMask = autoresizing;
+    _textView.frame = CGRectMake(textView_x, textView_y, textView_w, textView_h);
 }
 
 #pragma mark - TimeLabel
 
 -(void)addTimeLabel
 {
-    _timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 70, 20)];
+    _timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 52, 14)];
     _timeLabel.textColor = [UIColor lightGrayColor];
     _timeLabel.font = [UIFont fontWithName:@"Helvetica" size:12.0];
     _timeLabel.userInteractionEnabled = NO;
     _timeLabel.alpha = 0.7;
+    _timeLabel.textAlignment = NSTextAlignmentRight;
     [self.contentView addSubview:_timeLabel];
 }
 -(void)setTimeLabel
@@ -196,60 +153,92 @@
     df.timeStyle = NSDateFormatterShortStyle;
     df.dateStyle = NSDateFormatterNoStyle;
     df.doesRelativeDateFormatting = YES;
-    self.timeLabel.text = [df stringFromDate:self.message.sent];
-    [self.timeLabel sizeToFit];
+    self.timeLabel.text = [df stringFromDate:_message.sent];
     
     //Set position
-    CGFloat time_x = _bubbleImage.frame.origin.x + _bubbleImage.frame.size.width - _timeLabel.frame.size.width;
-    CGFloat time_y = self.height - _timeLabel.frame.size.height - 2;
-    UIViewAutoresizing autoresizing;
-
-    if (self.message.sender == MessageSenderMyself)
+    CGFloat time_x;
+    CGFloat time_y = _textView.frame.size.height - 10;
+    
+    if (_message.sender == MessageSenderMyself)
     {
-        time_x = time_x - 40;
-        autoresizing = UIViewAutoresizingFlexibleLeftMargin;
+        time_x = _textView.frame.origin.x + _textView.frame.size.width - _timeLabel.frame.size.width - 20;
     }
     else
     {
-        time_x = time_x - 15;
-        time_y = time_y - 2;
-        autoresizing = UIViewAutoresizingFlexibleRightMargin;
+        time_x = MAX(_textView.frame.origin.x + _textView.frame.size.width - _timeLabel.frame.size.width,
+                     _textView.frame.origin.x);
     }
     
-    self.timeLabel.frame = CGRectMake(time_x,
-                                      time_y,
-                                      self.timeLabel.frame.size.width,
-                                      self.timeLabel.frame.size.height);
+    if ([self isSingleLineCase])
+    {
+        time_x = _textView.frame.origin.x + _textView.frame.size.width - 5;
+        time_y -= 10;
+    }
     
-    self.timeLabel.autoresizingMask = autoresizing;
+    _timeLabel.frame = CGRectMake(time_x,
+                                  time_y,
+                                  _timeLabel.frame.size.width,
+                                  _timeLabel.frame.size.height);
     
-    [self addSingleLineCase];
+    _timeLabel.autoresizingMask = _textView.autoresizingMask;
 }
--(void)addSingleLineCase
+-(BOOL)isSingleLineCase
 {
-    CGFloat delta_x = _timeLabel.frame.size.width + 2;
-    CGRect time_frame = self.timeLabel.frame;
+    CGFloat delta_x = _message.sender == MessageSenderMyself?65.0:44.0;
     
-    CGFloat bubble_width = _bubbleImage.frame.size.width;
+    CGFloat textView_height = _textView.frame.size.height;
+    CGFloat textView_width = _textView.frame.size.width;
     CGFloat view_width = self.contentView.frame.size.width;
     
     //Single Line Case
-    if (self.height <= 45 && bubble_width + delta_x <= 0.8*view_width)
+    return (textView_height <= 45 && textView_width + delta_x <= 0.8*view_width)?YES:NO;
+}
+
+#pragma mark - Bubble
+
+-(void)addBubble
+{
+    _bubbleImage = [[UIImageView alloc] init];
+    _bubbleImage.userInteractionEnabled = YES;
+    [self.contentView insertSubview:_bubbleImage belowSubview:_textView];
+}
+- (void)setBubble
+{
+    //Margins to Bubble
+    CGFloat marginLeft = 5;
+    CGFloat marginRight = 2;
+    
+    //Bubble positions
+    CGFloat bubble_x;
+    CGFloat bubble_y = 0;
+    CGFloat bubble_width;
+    CGFloat bubble_height = MIN(_textView.frame.size.height + 8,
+                                _timeLabel.frame.origin.y + _timeLabel.frame.size.height + 6);
+    
+    if (_message.sender == MessageSenderMyself)
     {
-        if (self.message.sender == MessageSenderMyself)
-        {
-            delta_x += 20;
-            [self view:_textView shiftOriginX:-delta_x];
-            [self increaseBubble:delta_x shiftOriginX:-delta_x];
-        }
-        else
-        {
-            time_frame.origin.x += delta_x;
-            [self increaseBubble:delta_x shiftOriginX:0];
-        }
         
-        self.timeLabel.frame = time_frame;
+        bubble_x = MIN(_textView.frame.origin.x -marginLeft,_timeLabel.frame.origin.x - 2*marginLeft);
+        
+        _bubbleImage.image = [[UIImage imageNamed:@"bubbleMine"]
+                              stretchableImageWithLeftCapWidth:15 topCapHeight:14];
+        
+        
+        bubble_width = self.contentView.frame.size.width - bubble_x - marginRight;
     }
+    else
+    {
+        bubble_x = marginRight;
+        
+        _bubbleImage.image = [[UIImage imageNamed:@"bubbleSomeone"]
+                              stretchableImageWithLeftCapWidth:21 topCapHeight:14];
+        
+        bubble_width = MAX(_textView.frame.origin.x + _textView.frame.size.width + marginLeft,
+                           _timeLabel.frame.origin.x + _timeLabel.frame.size.width + 2*marginLeft);
+    }
+    
+    _bubbleImage.frame = CGRectMake(bubble_x, bubble_y, bubble_width, bubble_height);
+    _bubbleImage.autoresizingMask = _textView.autoresizingMask;
 }
 
 #pragma mark - StatusIcon
@@ -257,12 +246,12 @@
 -(void)addStatusIcon
 {
     CGRect time_frame = _timeLabel.frame;
-    CGRect status_frame = CGRectMake(0, 0, 15, 10);
+    CGRect status_frame = CGRectMake(0, 0, 15, 14);
     status_frame.origin.x = time_frame.origin.x + time_frame.size.width + 5;
     status_frame.origin.y = time_frame.origin.y;
     _statusIcon = [[UIImageView alloc] initWithFrame:status_frame];
     _statusIcon.contentMode = UIViewContentModeLeft;
-    _statusIcon.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+    _statusIcon.autoresizingMask = _textView.autoresizingMask;
     [self.contentView addSubview:_statusIcon];
 }
 -(void)setStatusIcon
@@ -277,38 +266,9 @@
         _statusIcon.image = [UIImage imageNamed:@"status_read"];
     
     _statusIcon.hidden = _message.sender == MessageSenderSomeone;
-    
-    //Animate Transition
-    _statusIcon.alpha = 0;
-    [UIView animateWithDuration:.5 animations:^{
-        _statusIcon.alpha = 1;
-    }];
 }
 
-#pragma mark - Helpers
 
--(void)increaseBubble:(CGFloat)deltaWidth shiftOriginX:(CGFloat)deltaX
-{
-    CGRect frame = _bubbleImage.frame;
-    frame.size.width += deltaWidth;
-    frame.origin.x += deltaX;
-    _bubbleImage.frame = frame;
-}
--(void)view:(UIView *)view shiftOriginX:(CGFloat)deltaX
-{
-    CGRect frame = view.frame;
-    frame.origin.x += deltaX;
-    view.frame = frame;
-}
--(CGSize)measureSizeOfUITextView
-{
-    CGFloat max_width = 0.7*self.contentView.frame.size.width;
-    UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, max_width, MAXFLOAT)];
-    textView.font = _textView.font;
-    textView.text = _textView.text;
-    [textView sizeToFit];
-    return textView.frame.size;
-}
 
 
 @end
