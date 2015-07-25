@@ -13,9 +13,9 @@
 @protocol MessageGatewayDelegate;
 
 //
-// Class responsable to send message to server
-// and notify status. It's also responsable to
-// get messages in local storage.
+// this class is responsable to send message
+// to server and notify status. It's also responsable
+// to get messages in local storage.
 //
 @interface MessageGateway : NSObject
 @property (assign, nonatomic) id<MessageGatewayDelegate> delegate;

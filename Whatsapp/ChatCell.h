@@ -9,6 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "Chat.h"
 
+//
+// This class is the custom cell in
+// ChatController
+//
 @interface ChatCell : UITableViewCell
 @property (strong, nonatomic) Chat *chat;
 @end

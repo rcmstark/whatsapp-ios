@@ -33,13 +33,16 @@
     }
     return self;
 }
--(void)storeMessage:(Message *)message forChat:(Chat *)chat
+-(void)storeMessage:(Message *)message
 {
-    [self storeMessages:@[message] forChat:chat];
+    [self storeMessages:@[message]];
 }
--(void)storeMessages:(NSArray *)messages forChat:(Chat *)chat
+-(void)storeMessages:(NSArray *)messages
 {
-    NSMutableArray *array = (NSMutableArray *)[self queryMessagesForChat:chat];
+    if (messages.count == 0) return;
+    Message *message = messages[0];
+    NSString *chat_id = message.chat_id;
+    NSMutableArray *array = (NSMutableArray *)[self queryMessagesForChatID:chat_id];
     if (array)
     {
         [array addObjectsFromArray:messages];
@@ -48,15 +51,11 @@
     {
         array = [[NSMutableArray alloc] initWithArray:messages];
     }
-    [self.mapChatToMessages setValue:array forKey:chat.receiver_id];
+    [self.mapChatToMessages setValue:array forKey:chat_id];
 }
--(NSArray *)queryMessagesForChat:(Chat *)chat
+-(NSArray *)queryMessagesForChatID:(NSString *)chat_id
 {
-    return [self.mapChatToMessages valueForKey:chat.receiver_id];
-}
--(void)updateMessage:(Message *)message forChat:(Chat *)chat
-{
-    
+    return [self.mapChatToMessages valueForKey:chat_id];
 }
 
 @end

@@ -9,13 +9,17 @@
 #import <UIKit/UIKit.h>
 #import "Message.h"
 
+//
+// This class build bubble message cells
+// for Income or Outgoing messages
+//
 @interface MessageCell : UITableViewCell
 
-//Store message
 @property (strong, nonatomic) Message *message;
+
+-(void)updateMessageStatus;
 
 //Estimate BubbleCell Height
 -(CGFloat)height;
--(void)updateMessageStatus;
 
 @end

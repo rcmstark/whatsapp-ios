@@ -10,4 +10,9 @@
 
 @implementation Chat
 
+-(NSString *)identifier
+{
+    return _receiver_id;
+}
+
 @end

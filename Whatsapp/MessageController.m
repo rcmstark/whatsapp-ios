@@ -60,6 +60,7 @@
         CGRect tableViewFrame = tableView.frame;
         tableViewFrame.size.height = toolBarFrame.origin.y - 64;
         tableView.frame = tableViewFrame;
+        
         [controller tableViewScrollToBottomAnimated:NO];
     }];
 }
@@ -68,8 +69,11 @@
     [super viewDidDisappear:animated];
     [self.view endEditing:YES];
     [self.view removeKeyboardControl];
-    self.chat.last_message = [self.messageArray lastObject];
     [self.gateway dismiss];
+}
+-(void)viewWillDisappear:(BOOL)animated
+{
+    self.chat.last_message = [self.messageArray lastObject];
 }
 
 #pragma mark -
@@ -190,6 +194,7 @@
     Message *message = [[Message alloc] init];
     message.text = inputbar.text;
     message.date = [NSDate date];
+    message.chat_id = _chat.identifier;
     
     //Store Message in memory
     [self.messageArray addObject:message];

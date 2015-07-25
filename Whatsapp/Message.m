@@ -20,6 +20,7 @@
         self.text = @"";
         self.heigh = 44;
         self.date = [NSDate date];
+        self.identifier = @"";
     }
     return self;
 }

@@ -11,12 +11,11 @@
 #import "Chat.h"
 
 // This class is responsable to store messages
-// For now this store in memory only
+// For now, it stores in memory only
 //
 @interface LocalStorage : NSObject
 +(id)sharedInstance;
--(void)storeMessage:(Message *)message forChat:(Chat *)chat;
--(void)storeMessages:(NSArray *)messages forChat:(Chat *)chat;
--(void)updateMessage:(Message *)message forChat:(Chat *)chat;
--(NSArray *)queryMessagesForChat:(Chat *)chat;
+-(void)storeMessage:(Message *)message;
+-(void)storeMessages:(NSArray *)messages;
+-(NSArray *)queryMessagesForChatID:(NSString *)chat_id;
 @end

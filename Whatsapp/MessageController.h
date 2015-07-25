@@ -9,6 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "Chat.h"
 
+//
+// This class control chat exchange message itself
+// It creates the bubble UI
+//
 @interface MessageController : UIViewController
 @property (strong, nonatomic) Chat *chat;
 @end

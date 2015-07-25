@@ -15,8 +15,10 @@
 //
 
 @interface Chat : NSObject
+@property (strong, nonatomic) Message *last_message;
 @property (strong, nonatomic) NSString *sender_name;
 @property (strong, nonatomic) NSString *sender_id;
 @property (strong, nonatomic) NSString *receiver_id;
-@property (strong, nonatomic) Message *last_message;
+@property (assign, nonatomic) NSInteger numberOfUnreadMessages;
+-(NSString *)identifier;
 @end

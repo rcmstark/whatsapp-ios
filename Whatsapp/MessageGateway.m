@@ -36,11 +36,29 @@
 }
 -(void)loadOldMessages
 {
-    NSArray *array = [[LocalStorage sharedInstance] queryMessagesForChat:self.chat];
+    NSArray *array = [[LocalStorage sharedInstance] queryMessagesForChatID:self.chat.identifier];
     if (self.delegate)
     {
         [self.delegate gatewayDidReceiveMessages:array];
     }
+    NSArray *unreadMessages = [self queryUnreadMessagesInArray:array];
+    [self updateStatusToReadInArray:unreadMessages];
+}
+-(void)updateStatusToReadInArray:(NSArray *)unreadMessages
+{
+    NSMutableArray *read_ids = [[NSMutableArray alloc] init];
+    for (Message *message in unreadMessages)
+    {
+        message.status = MessageStatusRead;
+        [read_ids addObject:message.identifier];
+    }
+    self.chat.numberOfUnreadMessages = 0;
+    [self sendReadStatusToMessages:read_ids];
+}
+-(NSArray *)queryUnreadMessagesInArray:(NSArray *)array
+{
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF.status == %d", MessageStatusReceived];
+    return [array filteredArrayUsingPredicate:predicate];
 }
 -(void)news
 {
@@ -50,16 +68,7 @@
 {
     self.delegate = nil;
 }
--(void)sendMessage:(Message *)message
-{
-    //
-    // Add here your code to send message to your server
-    // When you receive the response, you should update message status
-    // Now I'm just faking update message
-    //
-    [[LocalStorage sharedInstance] storeMessage:message forChat:self.chat];
-    [self fakeMessageUpdate:message];
-}
+
 -(void)fakeMessageUpdate:(Message *)message
 {
     [self performSelector:@selector(updateMessageStatus:) withObject:message afterDelay:2.0];
@@ -69,8 +78,8 @@
     if (message.status == MessageStatusSending)
         message.status = MessageStatusSent;
     else if (message.status == MessageStatusSent)
-        message.status = MessageStatusNotified;
-    else if (message.status == MessageStatusNotified)
+        message.status = MessageStatusReceived;
+    else if (message.status == MessageStatusReceived)
         message.status = MessageStatusRead;
     
     if (self.delegate && [self.delegate respondsToSelector:@selector(gatewayDidUpdateStatusForMessage:)])
@@ -84,6 +93,30 @@
     //
     if (message.status != MessageStatusRead)
         [self fakeMessageUpdate:message];
+}
+
+#pragma mark - Exchange data with API
+
+-(void)sendMessage:(Message *)message
+{
+    //
+    // Add here your code to send message to your server
+    // When you receive the response, you should update message status
+    // Now I'm just faking update message
+    //
+    [[LocalStorage sharedInstance] storeMessage:message];
+    [self fakeMessageUpdate:message];
+    //TODO
+}
+-(void)sendReadStatusToMessages:(NSArray *)message_ids
+{
+    if ([message_ids count] == 0) return;
+    //TODO
+}
+-(void)sendReceivedStatusToMessages:(NSArray *)message_ids
+{
+    if ([message_ids count] == 0) return;
+    //TODO
 }
 
 @end

@@ -13,7 +13,7 @@ typedef NS_ENUM(NSInteger, MessageStatus)
 {
     MessageStatusSending,
     MessageStatusSent,
-    MessageStatusNotified,
+    MessageStatusReceived,
     MessageStatusRead,
     MessageStatusFailed
 };
@@ -32,6 +32,7 @@ typedef NS_ENUM(NSInteger, MessageSender)
 @property (assign, nonatomic) MessageSender sender;
 @property (assign, nonatomic) MessageStatus status;
 @property (strong, nonatomic) NSString *identifier;
+@property (strong, nonatomic) NSString *chat_id;
 @property (strong, nonatomic) NSString *text;
 @property (strong, nonatomic) NSDate *date;
 @property (assign, nonatomic) CGFloat heigh;

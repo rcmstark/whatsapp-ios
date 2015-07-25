@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+//
+// This class is a list of chat conversations
+//
 @interface ChatController : UIViewController
-
 @end

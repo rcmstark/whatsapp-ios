@@ -28,9 +28,9 @@
     
     self.title = @"Chats";
 }
--(void)viewDidAppear:(BOOL)animated
+-(void)viewWillAppear:(BOOL)animated
 {
-    [super viewDidAppear:animated];
+    [super viewWillAppear:animated];
     [self.tableView reloadData];
 }
 -(void)setTableView
@@ -43,19 +43,31 @@
 }
 -(void)setTest
 {
-    Message *message = [[Message alloc] init];
-    message.text = @"This is a test message";
-    message.sender = MessageSenderSomeone;
-    
     Chat *chat = [[Chat alloc] init];
-    chat.last_message = message;
     chat.sender_name = @"Player 1";
     chat.receiver_id = @"12345";
     chat.sender_id = @"54321";
     
-    [[LocalStorage sharedInstance] storeMessage:message
-                                        forChat:chat];
+    NSArray *texts = @[@"Hello!",
+                       @"This project try to implement a chat UI similar to Whatsapp app.",
+                       @"Is it close enough?"];
     
+    Message *last_message = nil;
+    for (NSString *text in texts)
+    {
+        Message *message = [[Message alloc] init];
+        message.text = text;
+        message.sender = MessageSenderSomeone;
+        message.status = MessageStatusReceived;
+        message.chat_id = chat.identifier;
+        
+        [[LocalStorage sharedInstance] storeMessage:message];
+        last_message = message;
+    }
+    
+    chat.numberOfUnreadMessages = texts.count;
+    chat.last_message = last_message;
+
     [self.tableData addObject:chat];
 }
 

@@ -128,7 +128,7 @@
     else
     {
         textView_x = 20;
-        textView_y = -3;
+        textView_y = -1;
         autoresizing = UIViewAutoresizingFlexibleRightMargin;
     }
     
@@ -252,7 +252,7 @@
         _statusIcon.image = [UIImage imageNamed:@"status_sending"];
     else if (self.message.status == MessageStatusSent)
         _statusIcon.image = [UIImage imageNamed:@"status_sent"];
-    else if (self.message.status == MessageStatusNotified)
+    else if (self.message.status == MessageStatusReceived)
         _statusIcon.image = [UIImage imageNamed:@"status_notified"];
     else if (self.message.status == MessageStatusRead)
         _statusIcon.image = [UIImage imageNamed:@"status_read"];
