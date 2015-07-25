@@ -17,4 +17,5 @@
 //Estimate BubbleCell Height
 -(CGFloat)height;
 -(void)updateMessageStatus;
+
 @end

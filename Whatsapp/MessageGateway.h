@@ -8,9 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import "Message.h"
+#import "Chat.h"
 
 @protocol MessageGatewayDelegate;
-
 
 //
 // Class responsable to send message to server
@@ -19,8 +19,12 @@
 //
 @interface MessageGateway : NSObject
 @property (assign, nonatomic) id<MessageGatewayDelegate> delegate;
+@property (strong, nonatomic) Chat *chat;
++(id)sharedInstance;
+-(void)loadOldMessages;
 -(void)sendMessage:(Message *)message;
 -(void)news;
+-(void)dismiss;
 @end
 
 

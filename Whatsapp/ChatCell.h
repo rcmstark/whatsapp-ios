@@ -1,14 +1,14 @@
 //
-//  ChatController.h
+//  ChatListCell.h
 //  Whatsapp
 //
-//  Created by Rafael Castro on 6/16/15.
+//  Created by Rafael Castro on 7/24/15.
 //  Copyright (c) 2015 HummingBird. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 #import "Chat.h"
 
-@interface MessageController : UIViewController
+@interface ChatCell : UITableViewCell
 @property (strong, nonatomic) Chat *chat;
 @end

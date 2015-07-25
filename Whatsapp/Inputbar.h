@@ -39,5 +39,6 @@
 -(void)inputbarDidPressRightButton:(Inputbar *)inputbar;
 -(void)inputbarDidPressLeftButton:(Inputbar *)inputbar;
 @optional
+-(void)inputbarDidChangeHeight:(CGFloat)new_height;
 -(void)inputbarDidBecomeFirstResponder:(Inputbar *)inputbar;
 @end

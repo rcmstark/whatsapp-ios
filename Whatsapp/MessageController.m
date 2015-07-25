@@ -15,7 +15,7 @@
 #import "DAKeyboardControl.h"
 
 @interface MessageController() <InputbarDelegate,MessageGatewayDelegate,
-UITableViewDataSource,UITableViewDelegate>
+                                    UITableViewDataSource,UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet Inputbar *inputbar;
@@ -35,16 +35,16 @@ UITableViewDataSource,UITableViewDelegate>
     [self setInputbar];
     [self setTableView];
     [self setGateway];
-    [self addTest];
 }
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     
-    UIView *toolBar = _inputbar;
-    UITableView *tableView = _tableView;
+    __weak Inputbar *inputbar = _inputbar;
+    __weak UITableView *tableView = _tableView;
+    __weak MessageController *controller = self;
     
-    self.view.keyboardTriggerOffset = toolBar.frame.size.height;
+    self.view.keyboardTriggerOffset = inputbar.frame.size.height;
     [self.view addKeyboardPanningWithActionHandler:^(CGRect keyboardFrameInView, BOOL opening, BOOL closing) {
         /*
          Try not to call "self" inside this block (retain cycle).
@@ -53,39 +53,23 @@ UITableViewDataSource,UITableViewDelegate>
          [self.view removeKeyboardControl];
          */
         
-        CGRect toolBarFrame = toolBar.frame;
+        CGRect toolBarFrame = inputbar.frame;
         toolBarFrame.origin.y = keyboardFrameInView.origin.y - toolBarFrame.size.height;
-        toolBar.frame = toolBarFrame;
+        inputbar.frame = toolBarFrame;
         
         CGRect tableViewFrame = tableView.frame;
         tableViewFrame.size.height = toolBarFrame.origin.y - 64;
         tableView.frame = tableViewFrame;
-        
-        CGPoint offset = tableView.contentOffset;
-        offset.y = tableView.contentSize.height - tableView.frame.size.height;
-        [tableView setContentOffset:offset animated:NO];
+        [controller tableViewScrollToBottomAnimated:NO];
     }];
-    
 }
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
     [self.view endEditing:YES];
     [self.view removeKeyboardControl];
-}
--(void)addTest
-{
-    [self.messageArray removeAllObjects];
-    for (int i = 20; i > 0; i--)
-    {
-        Message *message = [[Message alloc] init];
-        message.text = [NSString stringWithFormat:@"%d: This is a teste message.",i];
-        message.sent = [[NSDate date] dateByAddingTimeInterval:-i*24*60*60];
-        message.status = MessageStatusRead;
-        message.sender = MessageSenderMyself;
-        
-        [self.messageArray addObject:message];
-    }
+    self.chat.last_message = [self.messageArray lastObject];
+    [self.gateway dismiss];
 }
 
 #pragma mark -
@@ -110,8 +94,15 @@ UITableViewDataSource,UITableViewDelegate>
 }
 -(void)setGateway
 {
-    self.gateway = [[MessageGateway alloc] init];
+    self.gateway = [MessageGateway sharedInstance];
     self.gateway.delegate = self;
+    self.gateway.chat = self.chat;
+    [self.gateway loadOldMessages];
+}
+-(void)setChat:(Chat *)chat
+{
+    _chat = chat;
+    self.title = chat.sender_name;
 }
 
 #pragma mark - Actions
@@ -137,7 +128,7 @@ UITableViewDataSource,UITableViewDelegate>
     MessageCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (!cell)
     {
-        cell = [[MessageCell alloc] init];
+        cell = [[MessageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     cell.message = [self.messageArray objectAtIndexPath:indexPath];
     return cell;
@@ -181,6 +172,16 @@ UITableViewDataSource,UITableViewDelegate>
     
     return view;
 }
+- (void)tableViewScrollToBottomAnimated:(BOOL)animated
+{
+    NSInteger numberOfSections = [self.messageArray numberOfSections];
+    NSInteger numberOfRows = [self.messageArray numberOfMessagesInSection:numberOfSections-1];
+    if (numberOfRows)
+    {
+        [_tableView scrollToRowAtIndexPath:[self.messageArray indexPathForLastMessage]
+                                         atScrollPosition:UITableViewScrollPositionBottom animated:animated];
+    }
+}
 
 #pragma mark - InputbarDelegate
 
@@ -188,7 +189,7 @@ UITableViewDataSource,UITableViewDelegate>
 {
     Message *message = [[Message alloc] init];
     message.text = inputbar.text;
-    message.sent = [NSDate date];
+    message.date = [NSDate date];
     
     //Store Message in memory
     [self.messageArray addObject:message];
@@ -200,7 +201,7 @@ UITableViewDataSource,UITableViewDelegate>
         [self.tableView insertSections:[NSIndexSet indexSetWithIndex:indexPath.section]
                       withRowAnimation:UITableViewRowAnimationNone];
     [self.tableView insertRowsAtIndexPaths:@[indexPath]
-                          withRowAnimation:UITableViewRowAnimationNone];
+                          withRowAnimation:UITableViewRowAnimationBottom];
     [self.tableView endUpdates];
     
     [self.tableView scrollToRowAtIndexPath:[self.messageArray indexPathForLastMessage]
@@ -217,6 +218,11 @@ UITableViewDataSource,UITableViewDelegate>
                                               cancelButtonTitle:@"Ok"
                                               otherButtonTitles:nil, nil];
     [alertView show];
+}
+-(void)inputbarDidChangeHeight:(CGFloat)new_height
+{
+    //Update DAKeyboardControl
+    self.view.keyboardTriggerOffset = new_height;
 }
 
 #pragma mark - MessageGatewayDelegate

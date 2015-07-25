@@ -7,6 +7,7 @@
 //
 
 #import "MessageGateway.h"
+#import "LocalStorage.h"
 
 @interface MessageGateway()
 @property (strong, nonatomic) NSMutableArray *messages_to_send;
@@ -15,6 +16,15 @@
 
 @implementation MessageGateway
 
++(id)sharedInstance
+{
+    static MessageGateway *sharedInstance = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedInstance = [[self alloc] init];
+    });
+    return sharedInstance;
+}
 -(id)init
 {
     self = [super init];
@@ -24,6 +34,22 @@
     }
     return self;
 }
+-(void)loadOldMessages
+{
+    NSArray *array = [[LocalStorage sharedInstance] queryMessagesForChat:self.chat];
+    if (self.delegate)
+    {
+        [self.delegate gatewayDidReceiveMessages:array];
+    }
+}
+-(void)news
+{
+    
+}
+-(void)dismiss
+{
+    self.delegate = nil;
+}
 -(void)sendMessage:(Message *)message
 {
     //
@@ -31,6 +57,11 @@
     // When you receive the response, you should update message status
     // Now I'm just faking update message
     //
+    [[LocalStorage sharedInstance] storeMessage:message forChat:self.chat];
+    [self fakeMessageUpdate:message];
+}
+-(void)fakeMessageUpdate:(Message *)message
+{
     [self performSelector:@selector(updateMessageStatus:) withObject:message afterDelay:2.0];
 }
 -(void)updateMessageStatus:(Message *)message
@@ -42,13 +73,17 @@
     else if (message.status == MessageStatusNotified)
         message.status = MessageStatusRead;
     
-    [self.delegate gatewayDidUpdateStatusForMessage:message];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(gatewayDidUpdateStatusForMessage:)])
+    {
+        [self.delegate gatewayDidUpdateStatusForMessage:message];
+    }
     
     //
     // Remove this when connect to your server
     // fake update message
     //
     if (message.status != MessageStatusRead)
-        [self sendMessage:message];
+        [self fakeMessageUpdate:message];
 }
+
 @end

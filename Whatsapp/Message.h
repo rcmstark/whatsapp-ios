@@ -24,18 +24,20 @@ typedef NS_ENUM(NSInteger, MessageSender)
     MessageSenderSomeone
 };
 
-
-
+//
+// This class is the message object itself
+//
 @interface Message : NSObject
 
 @property (assign, nonatomic) MessageSender sender;
 @property (assign, nonatomic) MessageStatus status;
 @property (strong, nonatomic) NSString *identifier;
 @property (strong, nonatomic) NSString *text;
-@property (strong, nonatomic) NSDate *sent;
+@property (strong, nonatomic) NSDate *date;
 @property (assign, nonatomic) CGFloat heigh;
 
 +(Message *)messageFromDictionary:(NSDictionary *)dictionary;
+
 @end
 
 

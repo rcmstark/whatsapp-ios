@@ -10,6 +10,10 @@
 		E03503751B47C0490041555A /* MessageGateway.m in Sources */ = {isa = PBXBuildFile; fileRef = E03503741B47C0490041555A /* MessageGateway.m */; };
 		E055D3B61B52FE5100994D12 /* Inputbar.m in Sources */ = {isa = PBXBuildFile; fileRef = E055D3B51B52FE5100994D12 /* Inputbar.m */; };
 		E06B97C51B3283F400F095A7 /* MessageArray.m in Sources */ = {isa = PBXBuildFile; fileRef = E06B97C41B3283F400F095A7 /* MessageArray.m */; };
+		E091C2F31B62C21A008A4C35 /* ChatController.m in Sources */ = {isa = PBXBuildFile; fileRef = E091C2F21B62C21A008A4C35 /* ChatController.m */; };
+		E091C2F61B62C7F3008A4C35 /* ChatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E091C2F51B62C7F3008A4C35 /* ChatCell.m */; };
+		E091C2FB1B62DBE5008A4C35 /* Chat.m in Sources */ = {isa = PBXBuildFile; fileRef = E091C2FA1B62DBE5008A4C35 /* Chat.m */; };
+		E0D17BF91B62FCB400B9043C /* LocalStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = E0D17BF81B62FCB400B9043C /* LocalStorage.m */; };
 		E0D1AD581B522E1200609BE1 /* HPGrowingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = E0D1AD551B522E1200609BE1 /* HPGrowingTextView.m */; };
 		E0D1AD591B522E1200609BE1 /* HPTextViewInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = E0D1AD571B522E1200609BE1 /* HPTextViewInternal.m */; };
 		E0ECC02F1B30BFEF003FB68A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E0ECC02E1B30BFEF003FB68A /* main.m */; };
@@ -40,10 +44,18 @@
 		E055D3B51B52FE5100994D12 /* Inputbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Inputbar.m; sourceTree = "<group>"; };
 		E06B97C31B3283F400F095A7 /* MessageArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageArray.h; sourceTree = "<group>"; };
 		E06B97C41B3283F400F095A7 /* MessageArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageArray.m; sourceTree = "<group>"; };
+		E091C2F11B62C21A008A4C35 /* ChatController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatController.h; sourceTree = "<group>"; };
+		E091C2F21B62C21A008A4C35 /* ChatController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatController.m; sourceTree = "<group>"; };
+		E091C2F41B62C7F3008A4C35 /* ChatCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatCell.h; sourceTree = "<group>"; };
+		E091C2F51B62C7F3008A4C35 /* ChatCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatCell.m; sourceTree = "<group>"; };
+		E091C2F91B62DBE5008A4C35 /* Chat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Chat.h; sourceTree = "<group>"; };
+		E091C2FA1B62DBE5008A4C35 /* Chat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Chat.m; sourceTree = "<group>"; };
 		E09372301B5AD82A0056FA8F /* API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = API.h; sourceTree = "<group>"; };
 		E09372311B5AD82A0056FA8F /* API.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = API.m; sourceTree = "<group>"; };
 		E09372321B5AD82A0056FA8F /* Connection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Connection.h; sourceTree = "<group>"; };
 		E09372331B5AD82A0056FA8F /* Connection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Connection.m; sourceTree = "<group>"; };
+		E0D17BF71B62FCB400B9043C /* LocalStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalStorage.h; sourceTree = "<group>"; };
+		E0D17BF81B62FCB400B9043C /* LocalStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalStorage.m; sourceTree = "<group>"; };
 		E0D1AD541B522E1200609BE1 /* HPGrowingTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPGrowingTextView.h; sourceTree = "<group>"; };
 		E0D1AD551B522E1200609BE1 /* HPGrowingTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HPGrowingTextView.m; sourceTree = "<group>"; };
 		E0D1AD561B522E1200609BE1 /* HPTextViewInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPTextViewInternal.h; sourceTree = "<group>"; };
@@ -86,11 +98,35 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E091C2F71B62D180008A4C35 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				E091C2F11B62C21A008A4C35 /* ChatController.h */,
+				E091C2F21B62C21A008A4C35 /* ChatController.m */,
+				E0ECC0521B30DA1D003FB68A /* MessageController.h */,
+				E0ECC0531B30DA1D003FB68A /* MessageController.m */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		E091C2F81B62DBD0008A4C35 /* Gateways */ = {
+			isa = PBXGroup;
+			children = (
+				E03503731B47C0490041555A /* MessageGateway.h */,
+				E03503741B47C0490041555A /* MessageGateway.m */,
+			);
+			name = Gateways;
+			sourceTree = "<group>";
+		};
 		E0D1AD5D1B522E2C00609BE1 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
 				E055D3B41B52FE5100994D12 /* Inputbar.h */,
 				E055D3B51B52FE5100994D12 /* Inputbar.m */,
+				E06B97C31B3283F400F095A7 /* MessageArray.h */,
+				E06B97C41B3283F400F095A7 /* MessageArray.m */,
+				E0D17BF71B62FCB400B9043C /* LocalStorage.h */,
+				E0D17BF81B62FCB400B9043C /* LocalStorage.m */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -98,6 +134,8 @@
 		E0DFF2A01B618CA50000E784 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
+				E091C2F41B62C7F3008A4C35 /* ChatCell.h */,
+				E091C2F51B62C7F3008A4C35 /* ChatCell.m */,
 				E0ECC05D1B30EEA2003FB68A /* MessageCell.h */,
 				E0ECC05E1B30EEA2003FB68A /* MessageCell.m */,
 			);
@@ -129,11 +167,11 @@
 				E0ECC0311B30BFEF003FB68A /* AppDelegate.m */,
 				E0ECC0361B30BFEF003FB68A /* Main.storyboard */,
 				E0ECC0391B30BFEF003FB68A /* Images.xcassets */,
-				E0ECC0521B30DA1D003FB68A /* MessageController.h */,
-				E0ECC0531B30DA1D003FB68A /* MessageController.m */,
+				E091C2F71B62D180008A4C35 /* Controllers */,
 				E0DFF2A01B618CA50000E784 /* Cell */,
 				E0D1AD5D1B522E2C00609BE1 /* Helpers */,
 				E0ECC05C1B30E8A6003FB68A /* Model */,
+				E091C2F81B62DBD0008A4C35 /* Gateways */,
 				E0ECC0581B30DBFC003FB68A /* Third-Party */,
 				E0ECC02C1B30BFEF003FB68A /* Supporting Files */,
 			);
@@ -186,12 +224,10 @@
 		E0ECC05C1B30E8A6003FB68A /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				E091C2F91B62DBE5008A4C35 /* Chat.h */,
+				E091C2FA1B62DBE5008A4C35 /* Chat.m */,
 				E0ECC0591B30E7F2003FB68A /* Message.h */,
 				E0ECC05A1B30E7F2003FB68A /* Message.m */,
-				E06B97C31B3283F400F095A7 /* MessageArray.h */,
-				E06B97C41B3283F400F095A7 /* MessageArray.m */,
-				E03503731B47C0490041555A /* MessageGateway.h */,
-				E03503741B47C0490041555A /* MessageGateway.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -298,15 +334,19 @@
 			files = (
 				E0ECC0321B30BFEF003FB68A /* AppDelegate.m in Sources */,
 				E06B97C51B3283F400F095A7 /* MessageArray.m in Sources */,
+				E091C2F61B62C7F3008A4C35 /* ChatCell.m in Sources */,
 				E03503751B47C0490041555A /* MessageGateway.m in Sources */,
 				E0ECC0571B30DBF7003FB68A /* DAKeyboardControl.m in Sources */,
 				E0D1AD591B522E1200609BE1 /* HPTextViewInternal.m in Sources */,
 				E0ECC05B1B30E7F2003FB68A /* Message.m in Sources */,
 				E0ECC05F1B30EEA2003FB68A /* MessageCell.m in Sources */,
+				E0D17BF91B62FCB400B9043C /* LocalStorage.m in Sources */,
 				E0D1AD581B522E1200609BE1 /* HPGrowingTextView.m in Sources */,
 				E055D3B61B52FE5100994D12 /* Inputbar.m in Sources */,
 				E0ECC02F1B30BFEF003FB68A /* main.m in Sources */,
 				E0ECC0541B30DA1D003FB68A /* MessageController.m in Sources */,
+				E091C2F31B62C21A008A4C35 /* ChatController.m in Sources */,
+				E091C2FB1B62DBE5008A4C35 /* Chat.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

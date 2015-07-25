@@ -172,6 +172,11 @@
     r.size.height -= diff;
     r.origin.y += diff;
     self.frame = r;
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(inputbarDidChangeHeight:)])
+    {
+        [self.delegate inputbarDidChangeHeight:self.frame.size.height];
+    }
 }
 -(void)growingTextViewDidBeginEditing:(HPGrowingTextView *)growingTextView
 {

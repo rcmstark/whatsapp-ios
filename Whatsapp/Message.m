@@ -19,6 +19,7 @@
         self.status = MessageStatusSending;
         self.text = @"";
         self.heigh = 44;
+        self.date = [NSDate date];
     }
     return self;
 }
@@ -46,7 +47,7 @@
     [outputDateFormatter setDateFormat:dateFormat];
     NSString *outputString = [outputDateFormatter stringFromDate:date];
     
-    message.sent = [outputDateFormatter dateFromString:outputString];
+    message.date = [outputDateFormatter dateFromString:outputString];
     
     return message;
 }

@@ -54,23 +54,31 @@
     }
     return self;
 }
--(void)layoutSubviews
-{
-    [self commonInit];
-}
 -(void)commonInit
 {
     self.backgroundColor = [UIColor clearColor];
-    self.selectionStyle = UITableViewCellSelectionStyleNone;
     self.contentView.backgroundColor = [UIColor clearColor];
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
+    self.accessoryType = UITableViewCellAccessoryNone;
+    
+    _textView = [[UITextView alloc] init];
+    _bubbleImage = [[UIImageView alloc] init];
+    _timeLabel = [[UILabel alloc] init];
+    _statusIcon = [[UIImageView alloc] init];
+    
+    [self.contentView addSubview:_bubbleImage];
+    [self.contentView addSubview:_textView];
+    [self.contentView addSubview:_timeLabel];
+    [self.contentView addSubview:_statusIcon];
 }
 -(void)prepareForReuse
 {
-    [self.contentView.subviews makeObjectsPerformSelector: @selector(removeFromSuperview)];
-    _textView = nil;
-    _bubbleImage = nil;
-    _timeLabel = nil;
-    _statusIcon = nil;
+    [super prepareForReuse];
+
+    _textView.text = @"";
+    _timeLabel.text = @"";
+    _statusIcon.image = nil;
+    _bubbleImage.image = nil;
 }
 -(void)setMessage:(Message *)message
 {
@@ -81,32 +89,26 @@
 }
 -(void)buildCell
 {
-    [self addTextView];
     [self setTextView];
-    
-    [self addTimeLabel];
     [self setTimeLabel];
-    
-    [self addBubble];
     [self setBubble];
     
     [self addStatusIcon];
     [self setStatusIcon];
+    
+    [self setNeedsLayout];
 }
 
 #pragma mark - TextView
 
--(void)addTextView
+-(void)setTextView
 {
     CGFloat max_witdh = 0.7*self.contentView.frame.size.width;
-    _textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, max_witdh, MAXFLOAT)];
+    _textView.frame = CGRectMake(0, 0, max_witdh, MAXFLOAT);
     _textView.font = [UIFont fontWithName:@"Helvetica" size:17.0];
     _textView.backgroundColor = [UIColor clearColor];
     _textView.userInteractionEnabled = NO;
-    [self.contentView addSubview:_textView];
-}
--(void)setTextView
-{
+    
     _textView.text = _message.text;
     [_textView sizeToFit];
     
@@ -136,24 +138,21 @@
 
 #pragma mark - TimeLabel
 
--(void)addTimeLabel
+-(void)setTimeLabel
 {
-    _timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 52, 14)];
+    _timeLabel.frame = CGRectMake(0, 0, 52, 14);
     _timeLabel.textColor = [UIColor lightGrayColor];
     _timeLabel.font = [UIFont fontWithName:@"Helvetica" size:12.0];
     _timeLabel.userInteractionEnabled = NO;
     _timeLabel.alpha = 0.7;
     _timeLabel.textAlignment = NSTextAlignmentRight;
-    [self.contentView addSubview:_timeLabel];
-}
--(void)setTimeLabel
-{
+    
     //Set Text to Label
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
     df.timeStyle = NSDateFormatterShortStyle;
     df.dateStyle = NSDateFormatterNoStyle;
     df.doesRelativeDateFormatting = YES;
-    self.timeLabel.text = [df stringFromDate:_message.sent];
+    self.timeLabel.text = [df stringFromDate:_message.date];
     
     //Set position
     CGFloat time_x;
@@ -196,12 +195,6 @@
 
 #pragma mark - Bubble
 
--(void)addBubble
-{
-    _bubbleImage = [[UIImageView alloc] init];
-    _bubbleImage.userInteractionEnabled = YES;
-    [self.contentView insertSubview:_bubbleImage belowSubview:_textView];
-}
 - (void)setBubble
 {
     //Margins to Bubble
@@ -249,10 +242,9 @@
     CGRect status_frame = CGRectMake(0, 0, 15, 14);
     status_frame.origin.x = time_frame.origin.x + time_frame.size.width + 5;
     status_frame.origin.y = time_frame.origin.y;
-    _statusIcon = [[UIImageView alloc] initWithFrame:status_frame];
+    _statusIcon.frame = status_frame;
     _statusIcon.contentMode = UIViewContentModeLeft;
     _statusIcon.autoresizingMask = _textView.autoresizingMask;
-    [self.contentView addSubview:_statusIcon];
 }
 -(void)setStatusIcon
 {

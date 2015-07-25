@@ -85,6 +85,11 @@
     NSArray *array = [self.mapTitleToMessages valueForKey:key];
     return array[indexPath.row];
 }
+-(Message *)lastObject
+{
+    NSIndexPath *indexPath = [self indexPathForLastMessage];
+    return [self objectAtIndexPath:indexPath];
+}
 -(NSIndexPath *)indexPathForLastMessage
 {
     NSInteger lastSection = _numberOfSections-1;
@@ -114,7 +119,7 @@
     [array addObject:message];
     [array sortedArrayUsingComparator:^NSComparisonResult(Message *m1, Message *m2)
      {
-         return [m1.sent compare: m2.sent];
+         return [m1.date compare: m2.date];
      }];
     
     [self.mapTitleToMessages setValue:array forKey:key];
@@ -154,7 +159,7 @@
 }
 -(NSString *)keyForMessage:(Message *)message
 {
-    return [self.formatter stringFromDate:message.sent];
+    return [self.formatter stringFromDate:message.date];
 }
 -(NSDateFormatter *)formatter
 {
