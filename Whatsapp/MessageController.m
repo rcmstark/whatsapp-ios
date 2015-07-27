@@ -8,7 +8,7 @@
 
 #import "MessageController.h"
 #import "MessageCell.h"
-#import "MessageArray.h"
+#import "TableArray.h"
 #import "MessageGateway.h"
 
 #import "Inputbar.h"
@@ -19,7 +19,7 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet Inputbar *inputbar;
-@property (strong, nonatomic) MessageArray *messageArray;
+@property (strong, nonatomic) TableArray *tableArray;
 @property (strong, nonatomic) MessageGateway *gateway;
 
 @end
@@ -73,7 +73,7 @@
 }
 -(void)viewWillDisappear:(BOOL)animated
 {
-    self.chat.last_message = [self.messageArray lastObject];
+    self.chat.last_message = [self.tableArray lastObject];
 }
 
 #pragma mark -
@@ -88,7 +88,7 @@
 }
 -(void)setTableView
 {
-    self.messageArray = [[MessageArray alloc] init];
+    self.tableArray = [[TableArray alloc] init];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f,self.view.frame.size.width, 10.0f)];
@@ -120,11 +120,11 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return [self.messageArray numberOfSections];
+    return [self.tableArray numberOfSections];
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self.messageArray numberOfMessagesInSection:section];
+    return [self.tableArray numberOfMessagesInSection:section];
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -134,7 +134,7 @@
     {
         cell = [[MessageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
-    cell.message = [self.messageArray objectAtIndexPath:indexPath];
+    cell.message = [self.tableArray objectAtIndexPath:indexPath];
     return cell;
 }
 
@@ -142,7 +142,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    Message *message = [self.messageArray objectAtIndexPath:indexPath];
+    Message *message = [self.tableArray objectAtIndexPath:indexPath];
     return message.heigh;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -151,7 +151,7 @@
 }
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return [self.messageArray titleForSection:section];
+    return [self.tableArray titleForSection:section];
 }
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
@@ -178,11 +178,11 @@
 }
 - (void)tableViewScrollToBottomAnimated:(BOOL)animated
 {
-    NSInteger numberOfSections = [self.messageArray numberOfSections];
-    NSInteger numberOfRows = [self.messageArray numberOfMessagesInSection:numberOfSections-1];
+    NSInteger numberOfSections = [self.tableArray numberOfSections];
+    NSInteger numberOfRows = [self.tableArray numberOfMessagesInSection:numberOfSections-1];
     if (numberOfRows)
     {
-        [_tableView scrollToRowAtIndexPath:[self.messageArray indexPathForLastMessage]
+        [_tableView scrollToRowAtIndexPath:[self.tableArray indexPathForLastMessage]
                                          atScrollPosition:UITableViewScrollPositionBottom animated:animated];
     }
 }
@@ -197,19 +197,19 @@
     message.chat_id = _chat.identifier;
     
     //Store Message in memory
-    [self.messageArray addObject:message];
+    [self.tableArray addObject:message];
     
     //Insert Message in UI
-    NSIndexPath *indexPath = [self.messageArray indexPathForMessage:message];
+    NSIndexPath *indexPath = [self.tableArray indexPathForMessage:message];
     [self.tableView beginUpdates];
-    if ([self.messageArray numberOfMessagesInSection:indexPath.section] == 1)
+    if ([self.tableArray numberOfMessagesInSection:indexPath.section] == 1)
         [self.tableView insertSections:[NSIndexSet indexSetWithIndex:indexPath.section]
                       withRowAnimation:UITableViewRowAnimationNone];
     [self.tableView insertRowsAtIndexPaths:@[indexPath]
                           withRowAnimation:UITableViewRowAnimationBottom];
     [self.tableView endUpdates];
     
-    [self.tableView scrollToRowAtIndexPath:[self.messageArray indexPathForLastMessage]
+    [self.tableView scrollToRowAtIndexPath:[self.tableArray indexPathForLastMessage]
                           atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     
     //Send message to server
@@ -234,13 +234,13 @@
 
 -(void)gatewayDidUpdateStatusForMessage:(Message *)message
 {
-    NSIndexPath *indexPath = [self.messageArray indexPathForMessage:message];
+    NSIndexPath *indexPath = [self.tableArray indexPathForMessage:message];
     MessageCell *cell = (MessageCell *)[self.tableView cellForRowAtIndexPath:indexPath];
     [cell updateMessageStatus];
 }
 -(void)gatewayDidReceiveMessages:(NSArray *)array
 {
-    [self.messageArray addObjectsFromArray:array];
+    [self.tableArray addObjectsFromArray:array];
     [self.tableView reloadData];
 }
 

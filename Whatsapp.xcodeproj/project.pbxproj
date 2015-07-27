@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		E03503751B47C0490041555A /* MessageGateway.m in Sources */ = {isa = PBXBuildFile; fileRef = E03503741B47C0490041555A /* MessageGateway.m */; };
 		E055D3B61B52FE5100994D12 /* Inputbar.m in Sources */ = {isa = PBXBuildFile; fileRef = E055D3B51B52FE5100994D12 /* Inputbar.m */; };
-		E06B97C51B3283F400F095A7 /* MessageArray.m in Sources */ = {isa = PBXBuildFile; fileRef = E06B97C41B3283F400F095A7 /* MessageArray.m */; };
+		E06B97C51B3283F400F095A7 /* TableArray.m in Sources */ = {isa = PBXBuildFile; fileRef = E06B97C41B3283F400F095A7 /* TableArray.m */; };
 		E091C2F31B62C21A008A4C35 /* ChatController.m in Sources */ = {isa = PBXBuildFile; fileRef = E091C2F21B62C21A008A4C35 /* ChatController.m */; };
 		E091C2F61B62C7F3008A4C35 /* ChatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E091C2F51B62C7F3008A4C35 /* ChatCell.m */; };
 		E091C2FB1B62DBE5008A4C35 /* Chat.m in Sources */ = {isa = PBXBuildFile; fileRef = E091C2FA1B62DBE5008A4C35 /* Chat.m */; };
@@ -42,8 +42,8 @@
 		E03503741B47C0490041555A /* MessageGateway.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageGateway.m; sourceTree = "<group>"; };
 		E055D3B41B52FE5100994D12 /* Inputbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Inputbar.h; sourceTree = "<group>"; };
 		E055D3B51B52FE5100994D12 /* Inputbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Inputbar.m; sourceTree = "<group>"; };
-		E06B97C31B3283F400F095A7 /* MessageArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageArray.h; sourceTree = "<group>"; };
-		E06B97C41B3283F400F095A7 /* MessageArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageArray.m; sourceTree = "<group>"; };
+		E06B97C31B3283F400F095A7 /* TableArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableArray.h; sourceTree = "<group>"; };
+		E06B97C41B3283F400F095A7 /* TableArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableArray.m; sourceTree = "<group>"; };
 		E091C2F11B62C21A008A4C35 /* ChatController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatController.h; sourceTree = "<group>"; };
 		E091C2F21B62C21A008A4C35 /* ChatController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatController.m; sourceTree = "<group>"; };
 		E091C2F41B62C7F3008A4C35 /* ChatCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatCell.h; sourceTree = "<group>"; };
@@ -123,10 +123,10 @@
 			children = (
 				E055D3B41B52FE5100994D12 /* Inputbar.h */,
 				E055D3B51B52FE5100994D12 /* Inputbar.m */,
-				E06B97C31B3283F400F095A7 /* MessageArray.h */,
-				E06B97C41B3283F400F095A7 /* MessageArray.m */,
 				E0D17BF71B62FCB400B9043C /* LocalStorage.h */,
 				E0D17BF81B62FCB400B9043C /* LocalStorage.m */,
+				E06B97C31B3283F400F095A7 /* TableArray.h */,
+				E06B97C41B3283F400F095A7 /* TableArray.m */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -333,7 +333,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E0ECC0321B30BFEF003FB68A /* AppDelegate.m in Sources */,
-				E06B97C51B3283F400F095A7 /* MessageArray.m in Sources */,
+				E06B97C51B3283F400F095A7 /* TableArray.m in Sources */,
 				E091C2F61B62C7F3008A4C35 /* ChatCell.m in Sources */,
 				E03503751B47C0490041555A /* MessageGateway.m in Sources */,
 				E0ECC0571B30DBF7003FB68A /* DAKeyboardControl.m in Sources */,

@@ -19,7 +19,7 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Whatsapp/MessageArray.m"
+            filePath = "Whatsapp/TableArray.m"
             timestampString = "459383737.002158"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"

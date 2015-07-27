@@ -6,9 +6,9 @@
 //  Copyright (c) 2015 HummingBird. All rights reserved.
 //
 
-#import "MessageArray.h"
+#import "TableArray.h"
 
-@interface MessageArray ()
+@interface TableArray ()
 @property (strong, nonatomic) NSMutableDictionary *mapTitleToMessages;
 @property (strong, nonatomic) NSArray *orderedTitles;
 @property (assign, nonatomic) NSInteger numberOfSections;
@@ -16,7 +16,7 @@
 @property (strong, nonatomic) NSDateFormatter *formatter;
 @end
 
-@implementation MessageArray
+@implementation TableArray
 
 -(id)init
 {
@@ -117,12 +117,12 @@
     }
     
     [array addObject:message];
-    [array sortedArrayUsingComparator:^NSComparisonResult(Message *m1, Message *m2)
-     {
-         return [m1.date compare: m2.date];
-     }];
-    
-    [self.mapTitleToMessages setValue:array forKey:key];
+    NSArray *sortedArray = [array sortedArrayUsingComparator:^NSComparisonResult(Message *m1, Message *m2)
+                            {
+                                return [m1.date compare: m2.date];
+                            }];
+    NSMutableArray *result = [NSMutableArray arrayWithArray:sortedArray];
+    [self.mapTitleToMessages setValue:result forKey:key];
     [self cacheTitles];
     
     _numberOfMessages += 1;
