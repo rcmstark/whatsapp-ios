@@ -76,6 +76,8 @@
 -(void)updateMessageStatus:(Message *)message
 {
     if (message.status == MessageStatusSending)
+        message.status = MessageStatusFailed;
+    else if (message.status == MessageStatusFailed)
         message.status = MessageStatusSent;
     else if (message.status == MessageStatusSent)
         message.status = MessageStatusReceived;

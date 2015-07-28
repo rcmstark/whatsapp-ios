@@ -14,6 +14,7 @@
 @property (strong, nonatomic) UITextView *textView;
 @property (strong, nonatomic) UIImageView *bubbleImage;
 @property (strong, nonatomic) UIImageView *statusIcon;
+@property (strong, nonatomic) UIButton *warningButton;
 @end
 
 
@@ -25,13 +26,12 @@
 }
 -(void)updateMessageStatus
 {
-    [self setStatusIcon];
+    [self buildCell];
     //Animate Transition
     _statusIcon.alpha = 0;
     [UIView animateWithDuration:.5 animations:^{
         _statusIcon.alpha = 1;
     }];
-    [self setNeedsDisplay];
 }
 
 #pragma mark -
@@ -65,11 +65,14 @@
     _bubbleImage = [[UIImageView alloc] init];
     _timeLabel = [[UILabel alloc] init];
     _statusIcon = [[UIImageView alloc] init];
+    _warningButton = [[UIButton alloc] init];
+    _warningButton.hidden = YES;
     
     [self.contentView addSubview:_bubbleImage];
     [self.contentView addSubview:_textView];
     [self.contentView addSubview:_timeLabel];
     [self.contentView addSubview:_statusIcon];
+    [self.contentView addSubview:_warningButton];
 }
 -(void)prepareForReuse
 {
@@ -79,6 +82,7 @@
     _timeLabel.text = @"";
     _statusIcon.image = nil;
     _bubbleImage.image = nil;
+    _warningButton.hidden = YES;
 }
 -(void)setMessage:(Message *)message
 {
@@ -95,6 +99,8 @@
     
     [self addStatusIcon];
     [self setStatusIcon];
+    
+    [self setFailedButton];
     
     [self setNeedsLayout];
 }
@@ -124,6 +130,7 @@
         textView_y = -3;
         autoresizing = UIViewAutoresizingFlexibleLeftMargin;
         textView_x -= [self isSingleLineCase]?65.0:0.0;
+        textView_x -= [self isStatusFailedCase]?([self fail_delta]-15):0.0;
     }
     else
     {
@@ -218,6 +225,7 @@
         
         
         bubble_width = self.contentView.frame.size.width - bubble_x - marginRight;
+        bubble_width -= [self isStatusFailedCase]?[self fail_delta]:0.0;
     }
     else
     {
@@ -256,11 +264,38 @@
         _statusIcon.image = [UIImage imageNamed:@"status_notified"];
     else if (self.message.status == MessageStatusRead)
         _statusIcon.image = [UIImage imageNamed:@"status_read"];
+    if (self.message.status == MessageStatusFailed)
+        _statusIcon.image = nil;
     
     _statusIcon.hidden = _message.sender == MessageSenderSomeone;
 }
 
+#pragma mark - Failed Case
 
+//
+// This delta is how much TextView
+// and Bubble should shit left
+//
+-(NSInteger)fail_delta
+{
+    return 60;
+}
+-(BOOL)isStatusFailedCase
+{
+    return self.message.status == MessageStatusFailed;
+}
+-(void)setFailedButton
+{
+    NSInteger b_size = 22;
+    CGRect frame = CGRectMake(self.contentView.frame.size.width - b_size - [self fail_delta]/2 + 5,
+                              (self.contentView.frame.size.height - b_size)/2,
+                              b_size,
+                              b_size);
+    
+    _warningButton.frame = frame;
+    _warningButton.hidden = ![self isStatusFailedCase];
+    [_warningButton setImage:[UIImage imageNamed:@"status_failed"] forState:UIControlStateNormal];
+}
 
 
 @end
