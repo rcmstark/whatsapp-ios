@@ -7,6 +7,7 @@
 //
 
 #import "ChatCell.h"
+#import "LocalStorage.h"
 
 @interface ChatCell()
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
@@ -33,7 +34,7 @@
 -(void)setChat:(Chat *)chat
 {
     _chat = chat;
-    self.nameLabel.text = chat.sender_name;
+    self.nameLabel.text = chat.contact.name;
     self.messageLabel.text = chat.last_message.text;
     [self updateTimeLabelWithDate:chat.last_message.date];
     [self updateUnreadMessagesIcon:chat.numberOfUnreadMessages];
@@ -49,7 +50,11 @@
 -(void)updateUnreadMessagesIcon:(NSInteger)numberOfUnreadMessages
 {
     self.notificationLabel.hidden = numberOfUnreadMessages == 0;
-    self.notificationLabel.text = [NSString stringWithFormat:@"%ld", numberOfUnreadMessages];
+    self.notificationLabel.text = [NSString stringWithFormat:@"%ld", (long)numberOfUnreadMessages];
+}
+-(UIImageView *)imageView
+{
+    return _picture;
 }
 
 @end

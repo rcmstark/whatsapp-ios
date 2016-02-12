@@ -15,7 +15,11 @@
 //
 @interface LocalStorage : NSObject
 +(id)sharedInstance;
--(void)storeMessage:(Message *)message;
--(void)storeMessages:(NSArray *)messages;
++(void)storeChat:(Chat *)chat;
++(void)storeChats:(NSArray *)chats;
++(void)storeContact:(Contact *)contact;
++(void)storeContacts:(NSArray *)contacts;
++(void)storeMessage:(Message *)message;
++(void)storeMessages:(NSArray *)messages;
 -(NSArray *)queryMessagesForChatID:(NSString *)chat_id;
 @end

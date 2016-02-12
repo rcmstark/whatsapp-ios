@@ -14,7 +14,6 @@
 @property (strong, nonatomic) UITextView *textView;
 @property (strong, nonatomic) UIImageView *bubbleImage;
 @property (strong, nonatomic) UIImageView *statusIcon;
-@property (strong, nonatomic) UIButton *warningButton;
 @end
 
 
@@ -65,24 +64,24 @@
     _bubbleImage = [[UIImageView alloc] init];
     _timeLabel = [[UILabel alloc] init];
     _statusIcon = [[UIImageView alloc] init];
-    _warningButton = [[UIButton alloc] init];
-    _warningButton.hidden = YES;
+    _resendButton = [[UIButton alloc] init];
+    _resendButton.hidden = YES;
     
     [self.contentView addSubview:_bubbleImage];
     [self.contentView addSubview:_textView];
     [self.contentView addSubview:_timeLabel];
     [self.contentView addSubview:_statusIcon];
-    [self.contentView addSubview:_warningButton];
+    [self.contentView addSubview:_resendButton];
 }
 -(void)prepareForReuse
 {
     [super prepareForReuse];
-
+    
     _textView.text = @"";
     _timeLabel.text = @"";
     _statusIcon.image = nil;
     _bubbleImage.image = nil;
-    _warningButton.hidden = YES;
+    _resendButton.hidden = YES;
 }
 -(void)setMessage:(Message *)message
 {
@@ -220,7 +219,7 @@
         
         bubble_x = MIN(_textView.frame.origin.x -marginLeft,_timeLabel.frame.origin.x - 2*marginLeft);
         
-        _bubbleImage.image = [[UIImage imageNamed:@"bubbleMine"]
+        _bubbleImage.image = [[self imageNamed:@"bubbleMine"]
                               stretchableImageWithLeftCapWidth:15 topCapHeight:14];
         
         
@@ -231,7 +230,7 @@
     {
         bubble_x = marginRight;
         
-        _bubbleImage.image = [[UIImage imageNamed:@"bubbleSomeone"]
+        _bubbleImage.image = [[self imageNamed:@"bubbleSomeone"]
                               stretchableImageWithLeftCapWidth:21 topCapHeight:14];
         
         bubble_width = MAX(_textView.frame.origin.x + _textView.frame.size.width + marginLeft,
@@ -257,13 +256,13 @@
 -(void)setStatusIcon
 {
     if (self.message.status == MessageStatusSending)
-        _statusIcon.image = [UIImage imageNamed:@"status_sending"];
+        _statusIcon.image = [self imageNamed:@"status_sending"];
     else if (self.message.status == MessageStatusSent)
-        _statusIcon.image = [UIImage imageNamed:@"status_sent"];
+        _statusIcon.image = [self imageNamed:@"status_sent"];
     else if (self.message.status == MessageStatusReceived)
-        _statusIcon.image = [UIImage imageNamed:@"status_notified"];
+        _statusIcon.image = [self imageNamed:@"status_notified"];
     else if (self.message.status == MessageStatusRead)
-        _statusIcon.image = [UIImage imageNamed:@"status_read"];
+        _statusIcon.image = [self imageNamed:@"status_read"];
     if (self.message.status == MessageStatusFailed)
         _statusIcon.image = nil;
     
@@ -292,10 +291,18 @@
                               b_size,
                               b_size);
     
-    _warningButton.frame = frame;
-    _warningButton.hidden = ![self isStatusFailedCase];
-    [_warningButton setImage:[UIImage imageNamed:@"status_failed"] forState:UIControlStateNormal];
+    _resendButton.frame = frame;
+    _resendButton.hidden = ![self isStatusFailedCase];
+    [_resendButton setImage:[self imageNamed:@"status_failed"] forState:UIControlStateNormal];
 }
 
+#pragma mark - UIImage Helper
+
+-(UIImage *)imageNamed:(NSString *)imageName
+{
+    return [UIImage imageNamed:imageName
+                      inBundle:[NSBundle bundleForClass:[self class]]
+ compatibleWithTraitCollection:nil];
+}
 
 @end

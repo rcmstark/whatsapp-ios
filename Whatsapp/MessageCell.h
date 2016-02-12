@@ -16,6 +16,7 @@
 @interface MessageCell : UITableViewCell
 
 @property (strong, nonatomic) Message *message;
+@property (strong, nonatomic) UIButton *resendButton;
 
 -(void)updateMessageStatus;
 

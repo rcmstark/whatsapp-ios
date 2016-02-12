@@ -106,7 +106,7 @@
 -(void)setChat:(Chat *)chat
 {
     _chat = chat;
-    self.title = chat.sender_name;
+    self.title = chat.contact.name;
 }
 
 #pragma mark - Actions

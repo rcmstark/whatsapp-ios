@@ -16,6 +16,7 @@
 		E0D17BF91B62FCB400B9043C /* LocalStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = E0D17BF81B62FCB400B9043C /* LocalStorage.m */; };
 		E0D1AD581B522E1200609BE1 /* HPGrowingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = E0D1AD551B522E1200609BE1 /* HPGrowingTextView.m */; };
 		E0D1AD591B522E1200609BE1 /* HPTextViewInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = E0D1AD571B522E1200609BE1 /* HPTextViewInternal.m */; };
+		E0E25BA51C6E68F300DB7CE7 /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = E0E25BA41C6E68F300DB7CE7 /* Contact.m */; };
 		E0ECC02F1B30BFEF003FB68A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E0ECC02E1B30BFEF003FB68A /* main.m */; };
 		E0ECC0321B30BFEF003FB68A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E0ECC0311B30BFEF003FB68A /* AppDelegate.m */; };
 		E0ECC0381B30BFEF003FB68A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E0ECC0361B30BFEF003FB68A /* Main.storyboard */; };
@@ -60,6 +61,8 @@
 		E0D1AD551B522E1200609BE1 /* HPGrowingTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HPGrowingTextView.m; sourceTree = "<group>"; };
 		E0D1AD561B522E1200609BE1 /* HPTextViewInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPTextViewInternal.h; sourceTree = "<group>"; };
 		E0D1AD571B522E1200609BE1 /* HPTextViewInternal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HPTextViewInternal.m; sourceTree = "<group>"; };
+		E0E25BA31C6E68F300DB7CE7 /* Contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contact.h; sourceTree = "<group>"; };
+		E0E25BA41C6E68F300DB7CE7 /* Contact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contact.m; sourceTree = "<group>"; };
 		E0ECC0291B30BFEF003FB68A /* Whatsapp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Whatsapp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0ECC02D1B30BFEF003FB68A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E0ECC02E1B30BFEF003FB68A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -226,6 +229,8 @@
 			children = (
 				E091C2F91B62DBE5008A4C35 /* Chat.h */,
 				E091C2FA1B62DBE5008A4C35 /* Chat.m */,
+				E0E25BA31C6E68F300DB7CE7 /* Contact.h */,
+				E0E25BA41C6E68F300DB7CE7 /* Contact.m */,
 				E0ECC0591B30E7F2003FB68A /* Message.h */,
 				E0ECC05A1B30E7F2003FB68A /* Message.m */,
 			);
@@ -332,6 +337,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E0E25BA51C6E68F300DB7CE7 /* Contact.m in Sources */,
 				E0ECC0321B30BFEF003FB68A /* AppDelegate.m in Sources */,
 				E06B97C51B3283F400F095A7 /* TableArray.m in Sources */,
 				E091C2F61B62C7F3008A4C35 /* ChatCell.m in Sources */,

@@ -43,10 +43,12 @@
 }
 -(void)setTest
 {
+    Contact *contact = [[Contact alloc] init];
+    contact.name = @"Player 1";
+    contact.identifier = @"12345";
+    
     Chat *chat = [[Chat alloc] init];
-    chat.sender_name = @"Player 1";
-    chat.receiver_id = @"12345";
-    chat.sender_id = @"54321";
+    chat.contact = contact;
     
     NSArray *texts = @[@"Hello!",
                        @"This project try to implement a chat UI similar to Whatsapp app.",

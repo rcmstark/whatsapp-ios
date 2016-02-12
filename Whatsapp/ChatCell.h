@@ -15,4 +15,5 @@
 //
 @interface ChatCell : UITableViewCell
 @property (strong, nonatomic) Chat *chat;
+-(UIImageView *)imageView;
 @end

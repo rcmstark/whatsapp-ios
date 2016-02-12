@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Message.h"
-
+#import "Contact.h"
 //
 // This class is responsable to store information
 // displayed in ChatController
@@ -16,9 +16,8 @@
 
 @interface Chat : NSObject
 @property (strong, nonatomic) Message *last_message;
-@property (strong, nonatomic) NSString *sender_name;
-@property (strong, nonatomic) NSString *sender_id;
-@property (strong, nonatomic) NSString *receiver_id;
+@property (strong, nonatomic) Contact *contact;
 @property (assign, nonatomic) NSInteger numberOfUnreadMessages;
 -(NSString *)identifier;
+-(void)save;
 @end

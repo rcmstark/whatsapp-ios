@@ -58,4 +58,21 @@
     return [self.mapChatToMessages valueForKey:chat_id];
 }
 
++(void)storeChat:(Chat *)chat
+{
+    //TODO
+}
++(void)storeChats:(NSArray *)chats
+{
+    //TODO
+}
++(void)storeContact:(Contact *)contact
+{
+    //TODO
+}
++(void)storeContacts:(NSArray *)contacts
+{
+    //TODO
+}
+
 @end
