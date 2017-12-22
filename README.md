@@ -20,4 +20,6 @@ For Android, visit my friend project: https://github.com/DeromirNeves/whatsapp-a
 
 
 
-![alt tag](https://raw.github.com/rcmcastro/whatsapp-ios/master/Screenshots/iOS Simulator Screen Shot Jun 18, 2015, 9.33.35 PM.png)
+![Preview Screen Shot 1](./Screenshots/Screen_Shot_1.png)
+
+![Preview Screen Shot 2](./Screenshots/Screen_Shot_2.png)
